@@ -1,12 +1,48 @@
 <template>
-  <q-card class="my-card">
-    <q-img class="img_food" :src="dish.imgUrl" />
+  <q-card class="product my-card" bordered>
+    <q-img class="img_food" :src="dish.imgUrl">
+      <div v-if="isSelected" class="absolute-full text-h4 flex flex-center">
+        <q-btn
+          :ripple="false"
+          flat
+          class="absolute-left no-shadow"
+          :icon="biDashLg"
+          style="width: 50px"
+          @click="
+            [
+              number > 1 ? decrement(dish.id) : number,
+              number > 1 ? number-- : number,
+            ]
+          "
+        />
+        {{ number }}
+        <q-btn
+          :ripple="false"
+          flat
+          class="absolute-right no-shadow"
+          :icon="biPlusLg"
+          style="width: 50px"
+          @click="
+            [
+              number < 20 ? increment(dish.id) : number,
+              number < 20 ? number++ : number,
+            ]
+          "
+        />
+      </div>
+    </q-img>
 
-    <q-card-section>
+    <q-card-section class="q-pt-xs q-pb-none">
       <q-btn
         fab
         :color="colorBtn"
-        @click="insertRemoveProduct()"
+        @click="
+          [
+            insertRemoveProduct(),
+            isSelected ? number++ : (number = 0),
+            isSelected ? addProduct(dish.id) : deleteProduct(dish.id),
+          ]
+        "
         :icon="icon"
         class="absolute"
         style="top: 0; right: 12px; transform: translateY(-50%)"
@@ -17,25 +53,27 @@
           {{ dish.name }}
         </div>
       </div>
-
-      <q-rating v-model="stars" :max="5" size="32px" />
+      <div class="q-py-none" style="height: 50px">
+        <q-rating class="vertical-top" v-model="stars" :max="5" size="32px" />
+      </div>
     </q-card-section>
 
     <q-card-section class="q-pt-none">
       <div class="text-subtitle1">
         $ {{ dish.precio }}・{{ getType(dish.type) }}
       </div>
-      <div class="text-caption text-grey">
+      <div class="text-caption text-grey" style="font-size: 16px">
         {{ dish.description }}
       </div>
     </q-card-section>
   </q-card>
 </template>
 <script>
-import { ref } from "vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
-import { useProductsStore } from "src/stores/products";
+import { biDashLg, biPlusLg } from "@quasar/extras/bootstrap-icons";
+
+import { useOrdersStore } from "src/stores/orders";
 
 export default defineComponent({
   name: `foodCard`,
@@ -44,19 +82,23 @@ export default defineComponent({
   },
   data() {
     return {
-      colorBtn: "secondary",
       icon: "shopping_cart",
     };
   },
   setup() {
-    const products = new useProductsStore();
-    const { setProduct, removeProduct, removeAllById } = products;
+    const order = useOrdersStore();
+    const { addProduct, deleteProduct, increment, decrement } = order;
     return {
-      products,
       stars: ref(4),
-      setProduct,
-      removeProduct,
-      removeAllById,
+      colorBtn: "secondary",
+      isSelected: ref(false),
+      number: ref(0),
+      biDashLg,
+      biPlusLg,
+      addProduct,
+      deleteProduct,
+      increment,
+      decrement,
     };
   },
   methods: {
@@ -84,14 +126,14 @@ export default defineComponent({
      * This method allows you to add a product to the order
      */
     insertRemoveProduct() {
-      if (this.colorBtn === "secondary") {
-        this.colorBtn = "negative";
-        this.icon = "done";
-        this.setProduct(this.dish);
-      } else {
-        this.colorBtn = "secondary";
+      if (this.isSelected) {
+        this.isSelected = false;
+        this.colorBtn = `secondary`;
         this.icon = "shopping_cart";
-        this.removeAllById(this.dish.id);
+      } else {
+        this.isSelected = true;
+        this.colorBtn = `negative`;
+        this.icon = "done";
       }
     },
   },
@@ -104,6 +146,7 @@ export default defineComponent({
   max-height: 400px;
   min-height: 400px;
   margin: 5px;
+  box-shadow: none;
 }
 .img_food {
   width: 100%;

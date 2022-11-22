@@ -12,6 +12,11 @@
         <q-tab name="most_sold" :label="$t(`index_tab.most_sold`)" />
         <q-tab name="food" :label="$t(`index_tab.food`)" />
         <q-tab name="combos" :label="$t(`index_tab.combos`)" />
+        <q-tab
+          name="favorite"
+          :label="$t(`index_tab.favorite`)"
+          v-if="isAutenticatedNow"
+        />
       </q-tabs>
     </div>
   </div>
@@ -20,10 +25,16 @@
 <script>
 import { ref } from "vue";
 
+import { useAuthStore } from "src/stores/auth";
+import { storeToRefs } from "pinia";
+
 export default {
   setup() {
+    const auth = new useAuthStore();
+    const { isAutenticatedNow } = storeToRefs(auth);
     return {
       tab: ref("most_sold"),
+      isAutenticatedNow,
     };
   },
 };

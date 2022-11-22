@@ -20,7 +20,7 @@ export default defineComponent({
   props: {
     inicial: { type: String, required: false, default: "U" },
   },
-  setup(props) {
+  setup() {
     return {};
   },
   methods: {

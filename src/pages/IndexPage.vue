@@ -1,6 +1,6 @@
 <template>
   <q-page
-    class="fit row wrap justify-center items-start content-center q-mb-lg"
+    class="index fit row wrap justify-center items-start content-center q-mb-lg"
   >
     <food-card-vue v-for="d in dishes" v-bind:key="d" :dish="d" />
   </q-page>

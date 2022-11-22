@@ -23,7 +23,7 @@ export const useProductsStore = defineStore("products", {
       this.selectedProducts.push(dish);
     },
     removeProduct(dish) {
-      var myIndex = this.selectedProducts.indexOf(dish);
+      const myIndex = this.selectedProducts.indexOf(dish);
       if (myIndex !== -1) this.selectedProducts.splice(myIndex, 1);
     },
     removeAllById(id) {

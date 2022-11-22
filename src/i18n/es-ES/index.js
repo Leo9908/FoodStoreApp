@@ -2,7 +2,7 @@
 // so you can safely delete all default props below
 
 export default {
-  nameSite: "Tienda de comida Gustó",
+  nameSite: "Gustó",
   failed: "Acción fallida",
   success: "La acción fue exitosa",
   wellcome: "Bienvenido",
@@ -10,6 +10,9 @@ export default {
                 para comprar comida de
                 excelente calidad desde la
                 comodidad de su hogar.`,
+  description2: `Alegrar corazones por intermedio
+                 de nuestra comida es nuestro
+                 proposito en la vida.`,
   login_card: {
     login: "Autenticar",
     register: "Registrar",
@@ -32,6 +35,10 @@ export default {
     most_sold: "Los más vendido",
     food: "Comida",
     combos: "Combos",
+    favorite: "Mis favoritas",
+  },
+  index: {
+    search: "Buscar producto",
   },
   carousel: {
     phrase1: "Comida deliciosa",
@@ -50,5 +57,27 @@ export default {
     phone: "Teléfono",
     municipality: "Municipio",
     address: "Dirección",
+    addressList: {
+      name: "Direcciones",
+      add: "Añadir dirección",
+      subtitle: "Mis direcciones",
+    },
+  },
+  errors: {
+    digites: `Must have more than {0} digits`,
+    letters: `Debe contener {0}`,
+    emptyField: "Por favor escriba algo",
+  },
+  add_address: {
+    city: "Ciudad",
+    neighbourhood: "Vecindario", //vecindario
+    road: "Carretera", //carretera
+    county: "Municipio",
+    apto: "Apartamento",
+    alias: "Alias",
+    alias_default: "Mi casa",
+  },
+  actions: {
+    delete: "Eliminar",
   },
 };

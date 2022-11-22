@@ -2,9 +2,13 @@ import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
 import { SessionStorage } from "quasar";
 
+import { useMapsStore } from "./maps";
+
+import User from "./objects/User";
+
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    me: {},
+    me: new User(),
     token: "",
     isAutenticated: false,
     inicial: "U",
@@ -23,8 +27,8 @@ export const useAuthStore = defineStore("auth", {
   },
 
   actions: {
-    doLogin(payload) {
-      api.post("/auth/login", payload).then((response) => {
+    async doLogin(payload) {
+      await api.post("/auth/login", payload).then((response) => {
         const token = response.data.accessToken;
         api.defaults.headers.common["Authorization"] = `Bearer${token}`;
         this.setToken(token);
@@ -49,27 +53,31 @@ export const useAuthStore = defineStore("auth", {
     setMe(me) {
       this.me = me;
     },
-    setInicial(inicial) {
-      this.inicial = inicial;
+    setInicial() {
+      this.inicial = this.me.name.substring(0, 1);
     },
     removeInicial() {
       this.inicial = "U";
     },
     getMe() {
+      const maps = useMapsStore();
       api
         .get("/auth/current-user")
         .then((response) => {
           this.setMe(response.data);
           this.setInicial(response.data.name.substring(0, 1));
+          maps.getAllAddress();
         })
         .catch((error) => {
           console.log(error);
+          this.isAutenticated = false;
         });
     },
     init() {
       const token = SessionStorage.getItem("token");
       if (token) {
-        api.defaults.headers.common["Authorization"] = `Bearer${token}`;
+        const tokenCopy = token.substring(1, token.length - 1);
+        api.defaults.headers.common["Authorization"] = `Bearer${tokenCopy}`;
         this.setToken(JSON.parse(token));
         this.getMe();
       } else {

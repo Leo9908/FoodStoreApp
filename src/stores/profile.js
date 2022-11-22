@@ -8,6 +8,7 @@ const user = new useAuthStore();
 export const useProfileStore = defineStore("profile", {
   state: () => ({
     me: user.me,
+    copyMe: user.me,
   }),
 
   getters: {
@@ -18,16 +19,16 @@ export const useProfileStore = defineStore("profile", {
 
   actions: {
     editUser(userEdited) {
-      this.me.name = userEdited.name;
-      this.me.last_name = userEdited.last_name;
-      this.me.email = userEdited.email;
-      this.me.phone = userEdited.phone;
-      this.me.municipality = userEdited.municipality;
-      this.me.address = userEdited.address;
-      user.setMe(this.me);
-      api.put(`/users/edit/${this.me.id}`, this.me).then((response) => {
-        user.setMe(response.data);
+      this.copyMe.name = userEdited.name;
+      this.copyMe.last_name = userEdited.last_name;
+      this.copyMe.email = userEdited.email;
+      this.copyMe.phone = userEdited.phone;
+      api.put(`/users/edit/${this.copyMe.id}`, this.copyMe).then(() => {
+        this.updateMe();
       });
+    },
+    updateMe() {
+      user.getMe();
     },
   },
 });

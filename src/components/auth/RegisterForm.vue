@@ -4,26 +4,28 @@
       <q-input
         v-model="name"
         label="Your name *"
-        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+        dense
       />
       <q-input
         v-model="last_name"
         label="Your last name *"
-        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+        dense
       />
       <q-input
         v-model="email"
         type="email"
         label="Your email *"
-        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+        dense
       />
       <q-input
         v-model="password"
         label="Your password *"
         :type="isPwd ? 'password' : 'text'"
-        :rules="[
-          (val) => val.length >= 5 || 'Please use more than 5 characters',
-        ]"
+        :rules="[(val) => val.length >= 8 || $t(`errors.digites`, [8])]"
+        dense
       >
         <template v-slot:append>
           <q-icon
@@ -102,7 +104,10 @@ export default {
             user: this.email.substring(0, this.email.indexOf("@")),
             email: this.email,
             pass: this.password,
+          }).then(() => {
+            this.$bus.emit("go-auth");
           });
+
           this.$q.notify({
             color: "green-4",
             textColor: "white",

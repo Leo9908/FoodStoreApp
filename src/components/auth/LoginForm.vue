@@ -11,7 +11,7 @@
         label="Your password *"
         :type="isPwd ? 'password' : 'text'"
         :rules="[
-          (val) => val.length >= 5 || 'Please use more than 5 characters',
+          (val) => val.length >= 8 || 'Please use more than 8 characters',
         ]"
       >
         <template v-slot:append>
@@ -60,9 +60,9 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       try {
-        this.auth.doLogin({
+        await this.auth.doLogin({
           usernameOrEmail: this.nameuser,
           password: this.password,
         });
@@ -74,14 +74,12 @@ export default {
         });
       } catch (error) {
         console.log(error);
-        if (error.response.data.message) {
-          this.notify.notify({
-            color: "red-5",
-            textColor: "white",
-            icon: "warning",
-            message: error.response.data.message,
-          });
-        }
+        this.notify.notify({
+          color: "red-5",
+          textColor: "white",
+          icon: "warning",
+          message: error.response.data.message,
+        });
       }
     },
     closedDialog() {

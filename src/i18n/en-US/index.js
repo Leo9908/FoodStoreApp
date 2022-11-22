@@ -2,7 +2,7 @@
 // so you can safely delete all default props below
 
 export default {
-  nameSite: "Gustó Food Store",
+  nameSite: "Gustó",
   failed: "Action failed",
   success: "Action was successful",
   wellcome: "Welcome",
@@ -10,6 +10,8 @@ export default {
                 to buy excellent quality
                 food from the comfort of
                 your home.`,
+  description2: `Glad hearts through our
+                 food is our purpose in life.`,
   login_card: {
     login: "Login",
     register: "Register",
@@ -32,6 +34,10 @@ export default {
     most_sold: "The most sold",
     food: "Food",
     combos: "Combos",
+    favorite: "My favourites",
+  },
+  index: {
+    search: "Search product",
   },
   carousel: {
     phrase1: "Delicious food",
@@ -50,5 +56,26 @@ export default {
     phone: "Phone",
     municipality: "Municipality",
     address: "Address",
+    addressList: {
+      name: "Addresses",
+      add: "add address",
+      subtitle: "My addresses",
+    },
+  },
+  errors: {
+    digites: `Must have more than {0} digits`,
+    letters: `Must contain {0}`,
+    emptyField: "Please type something",
+  },
+  add_address: {
+    apto: "Apartment",
+    alias: "Alias",
+    address: "Address",
+  },
+  actions: {
+    delete: "Delete",
+  },
+  responses: {
+    deleted: "Deleted",
   },
 };
