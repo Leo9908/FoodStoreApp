@@ -5,22 +5,37 @@ export default {
   nameSite: "Gustó",
   failed: "Acción fallida",
   success: "La acción fue exitosa",
+  submited: "Enviado",
   wellcome: "Bienvenido",
   description: `Este es el sitio perfecto
                 para comprar comida de
                 excelente calidad desde la
                 comodidad de su hogar.`,
-  description2: `Alegrar corazones por intermedio
-                 de nuestra comida es nuestro
+  description2: `Alegrar corazones mediante
+                 nuestra comida, es nuestro
                  proposito en la vida.`,
   login_card: {
-    login: "Autenticar",
-    register: "Registrar",
-    error: "El usuario ya existe",
+    login: "Iniciar sesión",
+    register: "Crear cuenta",
+    userExist: "El usuario ya existe",
     ok: "Usted se ha registrado correctamente",
     logOk: "Usted se ha autenticado correctamente",
     logNotOk: "Debe registrarse",
     terms: "Debe aceptar los terminos",
+    noCorrect: "Nombre de usuario o contraseña incorrectos",
+    licence: "Primero debe aceptar la licencia y los términos",
+    createAccount: "Crear tu cuenta en Gustó",
+    withAccount: "¿Ya tienes una cuenta?",
+    forgotten: "¿Olvidaste tu contraseña?",
+    changePassoword: "Asistencia de contraseña",
+    infoChangePass: `Ingrese la dirección de correo
+                     electrónico o nombre de usuario
+                     asociado con su cuenta de Gustó.`,
+    required: "Intruduzca su nueva contraseña",
+    sendingEmail: "Le hemos enviado un correo",
+    errorSending: "No existe ningún usuario con esas credenciales",
+    changedPass: "Cambio de contraseña exitoso",
+    noEquals: "Las contraseñas deben coincidir",
   },
   products: {
     breakfast: "Desayuno",
@@ -30,6 +45,16 @@ export default {
     fast_food: "Comida chatarra",
     canned_food: "Comida enlatada",
     side_dish: "Entremés",
+    ratings: {
+      thanks: "Gracias por su calificación",
+    },
+    errors: {
+      select: "Por favor, seleccione algún producto",
+      noProducts: `Lo sentimos. No hay productos
+         en venta en estos momentos,
+         por favor regrese más tarde. Gracias`,
+      noMatches: "No hay coincidencias",
+    },
   },
   index_tab: {
     most_sold: "Los más vendido",
@@ -38,7 +63,7 @@ export default {
     favorite: "Mis favoritas",
   },
   index: {
-    search: "Buscar producto",
+    search: "Buscar",
   },
   carousel: {
     phrase1: "Comida deliciosa",
@@ -63,8 +88,12 @@ export default {
       subtitle: "Mis direcciones",
     },
   },
+  hints: {
+    range: "Introduzca un número entre {0} y {1}",
+  },
   errors: {
     digites: `Must have more than {0} digits`,
+    range: `¡El valor debe estar entre {0} y {1}!`,
     letters: `Debe contener {0}`,
     emptyField: "Por favor escriba algo",
   },
@@ -79,5 +108,23 @@ export default {
   },
   actions: {
     delete: "Eliminar",
+  },
+  responses: {
+    deleted: "Elimindo",
+  },
+  orders: {
+    table: {
+      label: "Su pedido",
+      columns: {
+        product: "Producto",
+        amount: "Cantidad",
+        price: "Precio",
+      },
+    },
+    form: {
+      addresses: "Escoja las direcciones de entrega",
+      phone: "Contacto",
+    },
+    send: "Pedido enviado",
   },
 };

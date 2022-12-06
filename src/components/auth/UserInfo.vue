@@ -2,7 +2,7 @@
   <div class="q-pa-none">
     <q-tab-panels v-model="tabs" class="q-pa-none">
       <q-tab-panel name="data" class="q-pa-none">
-        <update-user-vue :me="getUser" />
+        <update-user-vue />
       </q-tab-panel>
       <q-tab-panel name="address" class="q-pa-none">
         <q-card class="row justify-center">
@@ -17,9 +17,6 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-
-import { useProfileStore } from "src/stores/profile";
-import { storeToRefs } from "pinia";
 
 import AddressListVue from "../address/AddressList.vue";
 import UpdateUserVue from "../forms/UpdateUser.vue";
@@ -56,13 +53,7 @@ export default defineComponent({
     this.$bus.on("delete_address", () => {});
   },
   setup() {
-    const profile = useProfileStore();
-    const { getUser } = storeToRefs(profile);
-    const { editUser } = profile;
     return {
-      profile,
-      getUser,
-      editUser,
       tabs: ref("data"),
     };
   },

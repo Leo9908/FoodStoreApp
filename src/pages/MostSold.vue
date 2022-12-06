@@ -2,7 +2,10 @@
   <q-page class="index flex flex-center q-mb-md">
     <food-card-vue v-for="d in products" v-bind:key="d" :dish="d" />
     <q-card
-      v-if="dishes.length == 0 || (isSearching && searchedDishes.length == 0)"
+      v-if="
+        mostSoldDishes.length == 0 ||
+        (isSearching && searchedDishes.length == 0)
+      "
       flat
       bordered
       class="q-ma-md bg-grey-2"
@@ -26,29 +29,27 @@ import { useProductsStore } from "stores/products";
 import { storeToRefs } from "pinia";
 
 export default defineComponent({
-  name: "IndexPage",
+  name: "MostSold",
   components: {
     FoodCardVue,
   },
-  created() {
+  beforeCreate() {
     try {
-      if (this.dishes.length == 0) {
-        this.getProducts();
+      if (this.mostSoldDishes.length == 0) {
+        this.getMostSoldProducts();
       }
     } catch (error) {
       console.log(error);
     }
   },
-  data() {
-    return {};
-  },
   setup() {
     const product = useProductsStore();
-    const { dishes, searchedDishes, isSearching } = storeToRefs(product);
-    const { getProducts } = product;
+    const { mostSoldDishes, searchedDishes, isSearching } =
+      storeToRefs(product);
+    const { getMostSoldProducts } = product;
     return {
-      dishes,
-      getProducts,
+      mostSoldDishes,
+      getMostSoldProducts,
       searchedDishes,
       isSearching,
     };
@@ -58,7 +59,7 @@ export default defineComponent({
       if (this.isSearching) {
         return this.searchedDishes;
       }
-      return this.dishes;
+      return this.mostSoldDishes;
     },
   },
 });

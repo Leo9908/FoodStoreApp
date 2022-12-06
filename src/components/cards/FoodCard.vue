@@ -54,7 +54,17 @@
         </div>
       </div>
       <div class="q-py-none" style="height: 50px">
-        <q-rating class="vertical-top" v-model="stars" :max="5" size="32px" />
+        <q-rating
+          class="vertical-top"
+          v-model="stars"
+          max="5"
+          size="32px"
+          color="yellow"
+          icon="star_border"
+          icon-selected="star"
+          icon-half="star_half"
+          no-dimming
+        />
       </div>
     </q-card-section>
 
@@ -74,22 +84,43 @@ import { defineComponent, ref } from "vue";
 import { biDashLg, biPlusLg } from "@quasar/extras/bootstrap-icons";
 
 import { useOrdersStore } from "src/stores/orders";
+import { useProductsStore } from "src/stores/products";
+import { Notify } from "quasar";
+import { biHandThumbsUpFill } from "@quasar/extras/bootstrap-icons";
 
 export default defineComponent({
   name: `foodCard`,
   props: {
     dish: { type: Object, required: true },
   },
+  beforeCreate() {
+    this.isSelected = this.isSelectedNow(this.dish.id);
+    if (this.isSelected) {
+      this.number = this.numberProduct(this.dish.id);
+    } else {
+      this.number = 0;
+    }
+  },
+  created() {
+    if (this.isSelected) {
+      this.colorBtn = `negative`;
+      this.icon = "done";
+    }
+  },
   data() {
+    const stars = ref(this.dish.rating);
     return {
       icon: "shopping_cart",
+      stars,
+      perfectRating: ref(5),
     };
   },
   setup() {
     const order = useOrdersStore();
+    const products = useProductsStore();
     const { addProduct, deleteProduct, increment, decrement } = order;
+    const { doRating } = products;
     return {
-      stars: ref(4),
       colorBtn: "secondary",
       isSelected: ref(false),
       number: ref(0),
@@ -99,7 +130,27 @@ export default defineComponent({
       deleteProduct,
       increment,
       decrement,
+      isSelectedNow: order.isSelected,
+      numberProduct: order.numberProduct,
+      doRating,
     };
+  },
+  watch: {
+    stars(newVal, oldVal) {
+      try {
+        this.doRating(this.dish.id, newVal);
+        Notify.create({
+          message: this.$t("products.ratings.thanks"),
+          color: "info",
+          icon: biHandThumbsUpFill,
+        });
+      } catch (error) {
+        Notify.create({
+          message: error,
+          color: "warning",
+        });
+      }
+    },
   },
   methods: {
     getType(num) {

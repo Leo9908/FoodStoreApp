@@ -10,9 +10,7 @@
         v-model="password"
         label="Your password *"
         :type="isPwd ? 'password' : 'text'"
-        :rules="[
-          (val) => val.length >= 8 || 'Please use more than 8 characters',
-        ]"
+        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
       >
         <template v-slot:append>
           <q-icon
@@ -43,7 +41,7 @@ import { useAuthStore } from "stores/auth";
 export default {
   setup() {
     const notify = useQuasar();
-    const auth = new useAuthStore();
+    const auth = useAuthStore();
     const nameuser = ref(null);
     const password = ref(null);
 

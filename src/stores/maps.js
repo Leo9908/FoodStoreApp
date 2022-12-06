@@ -22,6 +22,13 @@ export const useMapsStore = defineStore("maps", {
     getAddress(state) {
       return state.address;
     },
+    getAddresses(state) {
+      return state.addresses;
+    },
+    getAddressById(state) {
+      return (addressId) =>
+        state.addresses.find((address) => address.id == addressId);
+    },
     getSelectedsAddress(state) {
       return state.selectedsAddress;
     },

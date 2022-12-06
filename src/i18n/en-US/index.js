@@ -5,6 +5,7 @@ export default {
   nameSite: "Gustó",
   failed: "Action failed",
   success: "Action was successful",
+  submited: "Submited",
   wellcome: "Welcome",
   description: `This is the perfect place
                 to buy excellent quality
@@ -13,13 +14,26 @@ export default {
   description2: `Glad hearts through our
                  food is our purpose in life.`,
   login_card: {
-    login: "Login",
-    register: "Register",
-    error: "The user already exists",
-    ok: "You have successfully registered",
+    login: "Log in",
+    register: "Create Account",
+    userExist: "The user already exists",
+    registerOk: "You have successfully registered",
     logOk: "You have successfully authenticated",
     logNotOk: "You must register",
     terms: "You must accept the terms",
+    noCorrect: "Username or password incorrect",
+    licence: "You need to accept the license and terms first",
+    createAccount: "Create your account in Gustó",
+    withAccount: "You have an account?",
+    forgotten: "Forgot your password?",
+    changePassoword: "Password assistance",
+    infoChangePass: `Enter the email address or username
+                     associated with your Gustó account.`,
+    required: "Enter your new password",
+    sendingEmail: "We have sent you an email",
+    errorSending: "There is no user with those credentials",
+    changedPass: "Password change successful",
+    noEquals: "Passwords must match",
   },
   products: {
     breakfast: "Breakfast",
@@ -29,6 +43,16 @@ export default {
     fast_food: "Fast food",
     canned_food: "Canned food",
     side_dish: "Side dish",
+    ratings: {
+      thanks: "Thanks for your rating.",
+    },
+    errors: {
+      select: "Please, select a product",
+      noProducts: `We're sorry. There are no products
+                   for sale at the moment,
+                   please check back later. Thank you`,
+      noMatches: "No matches",
+    },
   },
   index_tab: {
     most_sold: "The most sold",
@@ -37,7 +61,7 @@ export default {
     favorite: "My favourites",
   },
   index: {
-    search: "Search product",
+    search: "Search",
   },
   carousel: {
     phrase1: "Delicious food",
@@ -62,8 +86,12 @@ export default {
       subtitle: "My addresses",
     },
   },
+  hints: {
+    range: "Enter a number between {0} and {1}",
+  },
   errors: {
     digites: `Must have more than {0} digits`,
+    range: `The value must be between {0} and {1}!`,
     letters: `Must contain {0}`,
     emptyField: "Please type something",
   },
@@ -77,5 +105,20 @@ export default {
   },
   responses: {
     deleted: "Deleted",
+  },
+  orders: {
+    table: {
+      label: "Your order",
+      columns: {
+        product: "Product",
+        amount: "Amount",
+        price: "Price",
+      },
+    },
+    form: {
+      addresses: "Choose delivery addresses",
+      phone: "Contact",
+    },
+    send: "Order sent",
   },
 };

@@ -9,11 +9,20 @@
         shrink
         stretch
       >
-        <q-tab name="most_sold" :label="$t(`index_tab.most_sold`)" />
-        <q-tab name="food" :label="$t(`index_tab.food`)" />
-        <q-tab name="combos" :label="$t(`index_tab.combos`)" />
-        <q-tab
+        <q-route-tab name="food" to="/home" :label="$t(`index_tab.food`)" />
+        <q-route-tab
+          name="most_sold"
+          to="/most-sold"
+          :label="$t(`index_tab.most_sold`)"
+        />
+        <q-route-tab
+          name="combos"
+          to="/combos"
+          :label="$t(`index_tab.combos`)"
+        />
+        <q-route-tab
           name="favorite"
+          to="/favorite"
           :label="$t(`index_tab.favorite`)"
           v-if="isAutenticatedNow"
         />

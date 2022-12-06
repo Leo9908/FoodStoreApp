@@ -28,7 +28,7 @@
             $t("edit_profile.addressList.subtitle")
           }}</q-item-label>
           <q-separator />
-          <q-scroll-area style="height: 270px; width: 260px" visible="false">
+          <q-scroll-area style="height: 250px; width: 260px">
             <div class="q-py-xs" v-for="address in addresses" :key="address.id">
               <address-item-vue :address="address" @select="showAddressNow" />
             </div>

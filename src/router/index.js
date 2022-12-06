@@ -1,4 +1,5 @@
 import { route } from "quasar/wrappers";
+import { useAuthStore } from "src/stores/auth";
 import {
   createRouter,
   createMemoryHistory,
@@ -30,6 +31,16 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
+  });
+
+  Router.beforeEach((to, from) => {
+    const auth = useAuthStore();
+    if (!auth.isAutenticatedNow && to.path == "/favorite") {
+      return { path: "/" };
+    }
+    if (auth.isAutenticatedNow && to.path.includes("auth")) {
+      return { path: "/" };
+    }
   });
 
   return Router;

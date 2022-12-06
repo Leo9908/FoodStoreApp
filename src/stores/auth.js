@@ -4,11 +4,12 @@ import { SessionStorage } from "quasar";
 
 import { useMapsStore } from "./maps";
 
-import User from "./objects/User";
+import { useProductsStore } from "./products";
+import { useProfileStore } from "./profile";
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    me: new User(),
+    me: {},
     token: "",
     isAutenticated: false,
     inicial: "U",
@@ -24,6 +25,9 @@ export const useAuthStore = defineStore("auth", {
     getInicial(state) {
       return state.inicial;
     },
+    getUserId(state) {
+      return state.me.id;
+    },
   },
 
   actions: {
@@ -38,6 +42,7 @@ export const useAuthStore = defineStore("auth", {
     singOut() {
       api.defaults.headers.common["Authorization"] = "";
       this.removeToken();
+      this.removeMe();
     },
     setToken(token) {
       this.token = token;
@@ -61,17 +66,26 @@ export const useAuthStore = defineStore("auth", {
     },
     getMe() {
       const maps = useMapsStore();
+      const product = useProductsStore();
+      const profile = useProfileStore();
       api
         .get("/auth/current-user")
         .then((response) => {
           this.setMe(response.data);
+          profile.setMe(this.me);
           this.setInicial(response.data.name.substring(0, 1));
           maps.getAllAddress();
+          product.getFavoritesProducts();
         })
         .catch((error) => {
           console.log(error);
           this.isAutenticated = false;
         });
+    },
+    removeMe() {
+      const profile = useProfileStore();
+      this.me = {};
+      profile.clearMe();
     },
     init() {
       const token = SessionStorage.getItem("token");
@@ -83,6 +97,18 @@ export const useAuthStore = defineStore("auth", {
       } else {
         this.removeToken();
       }
+    },
+    async sendEmailChangePassword(email) {
+      await api
+        .post("/auth/email/send-email", { emailTo: email })
+        .then((response) => {});
+    },
+    async changePassword(password, confirmPassword, route) {
+      await api.post("/auth/email/change-password", {
+        password: password,
+        confirmPassword: confirmPassword,
+        tokenPassword: route.params.tokenPassword,
+      });
     },
   },
 });

@@ -3,17 +3,18 @@ import { api } from "src/boot/axios";
 
 import { useAuthStore } from "./auth";
 
-const user = new useAuthStore();
-
 export const useProfileStore = defineStore("profile", {
   state: () => ({
-    me: user.me,
-    copyMe: user.me,
+    me: {},
+    copyMe: {},
   }),
 
   getters: {
     getUser(state) {
       return state.me;
+    },
+    getPhone(state) {
+      return state.me.phone;
     },
   },
 
@@ -27,8 +28,18 @@ export const useProfileStore = defineStore("profile", {
         this.updateMe();
       });
     },
+    setMe(me) {
+      this.me = me;
+      this.copyMe = me;
+    },
+    clearMe() {
+      this.me = {};
+      this.copyMe = {};
+    },
     updateMe() {
+      const user = useAuthStore();
       user.getMe();
+      this.me = user.me;
     },
   },
 });

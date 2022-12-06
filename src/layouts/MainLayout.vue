@@ -13,17 +13,19 @@
       </q-toolbar>
       <ProductsTabsVue class="float-center" />
     </q-header>
-    <FooterIndexVue class="absolute-bottom" />
-    <div>
-      <carousel-index-vue class="carousel" />
-    </div>
     <div class="q-pa-xs q-gutter-sm">
       <AuthDialogVue style="height: 0px" />
     </div>
-    <div class="row justify-center q-py-md">
-      <SearchProductVue class="col-4" />
-    </div>
-    <q-page-container class="q-mt-none q-pt-none" style="padding-top: 0px">
+    <section>
+      <div>
+        <carousel-index-vue class="carousel" />
+      </div>
+      <div class="row justify-center q-py-md">
+        <SearchProductVue class="col-4" />
+      </div>
+    </section>
+    <FooterIndexVue class="absolute-bottom" />
+    <q-page-container style="padding-top: 0px; padding-bottom: 150px">
       <router-view />
     </q-page-container>
   </q-layout>
@@ -34,11 +36,12 @@ import { defineComponent, ref } from "vue";
 
 import LanguageSelect from "components/selects/LanguageSelect.vue";
 import AvatarIcon from "components/AvatarIcon.vue";
+
 import AuthDialogVue from "src/components/auth/AuthDialog.vue";
-import CarouselIndexVue from "src/components/CarouselIndex.vue";
 import ProductsTabsVue from "src/components/tabs/ProductsTabs.vue";
 import FooterIndexVue from "src/components/loyouts/FooterIndex.vue";
 import ButtonBasketVue from "src/components/buttons/ButtonBasket.vue";
+import CarouselIndexVue from "src/components/CarouselIndex.vue";
 import SearchProductVue from "src/components/inputs/SearchProduct.vue";
 
 import { useAuthStore } from "stores/auth";
@@ -49,14 +52,14 @@ import { useOrdersStore } from "src/stores/orders";
 export default defineComponent({
   name: "MainLayout",
   components: {
+    AuthDialogVue,
     LanguageSelect,
     AvatarIcon,
-    AuthDialogVue,
-    CarouselIndexVue,
     ProductsTabsVue,
     FooterIndexVue,
     ButtonBasketVue,
     SearchProductVue,
+    CarouselIndexVue,
   },
   setup() {
     const auth = useAuthStore();
@@ -74,10 +77,5 @@ export default defineComponent({
 <style lang="scss">
 .language {
   margin-right: 10px;
-}
-.carousel {
-  min-width: 100%;
-  padding: 0px;
-  padding-top: 120px;
 }
 </style>

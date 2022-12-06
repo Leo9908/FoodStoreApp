@@ -60,7 +60,7 @@ import { useRegisterStore } from "src/stores/register";
 
 export default {
   setup() {
-    const register = new useRegisterStore();
+    const register = useRegisterStore();
     const { registerUser } = register;
     const name = ref(null);
     const last_name = ref(null);

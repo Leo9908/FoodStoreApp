@@ -9,6 +9,7 @@
         class="avatar-icon .col .col-md-2 row justify-center q-pb-xs"
       >
         <q-avatar
+          class="avatar"
           :size="tabs == `edit` ? `100px` : `150px`"
           :font-size="tabs == `edit` ? `80px` : `120px`"
           color="primary"
@@ -34,7 +35,7 @@
           </q-badge>
         </q-avatar>
       </q-card-section>
-      <q-card-section class="profile-info .col .col-md-8 q-pa-xs">
+      <q-card-section class="profile-info .col .col-md-8 q-pa-none">
         <q-tab-panels class="q-pb-xs" v-model="tabs">
           <q-tab-panel class="q-pb-xs" name="info">
             <q-card flat bordered class="my-card">
