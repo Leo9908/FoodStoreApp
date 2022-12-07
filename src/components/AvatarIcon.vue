@@ -8,6 +8,11 @@
         text-color="white"
         >{{ inicial }}
       </q-avatar>
+      <profile-menu-vue
+        v-if="isAutenticatedNow"
+        :offset="[200, 5]"
+        :inicial="inicial"
+      />
     </q-btn>
   </div>
 </template>
@@ -15,10 +20,13 @@
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "src/stores/auth";
 import { defineComponent, ref } from "vue";
+import ProfileMenuVue from "./menus/ProfileMenu.vue";
 
 export default defineComponent({
   name: "AvatarIcon",
-
+  components: {
+    ProfileMenuVue,
+  },
   props: {
     inicial: { type: String, required: false, default: "U" },
   },

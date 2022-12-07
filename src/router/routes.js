@@ -26,6 +26,18 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/profile/",
+    component: () => import("layouts/ProfileLayout.vue"),
+    children: [
+      { path: "user-info", component: () => import("src/pages/UserInfo.vue") },
+      { path: "addresses", component: () => import("pages/AddressesPage.vue") },
+      {
+        path: "address/:id",
+        component: () => import("src/pages/EditAddressPage.vue"),
+      },
+    ],
+  },
   // Always leave this as last one,
   // but you can also remove it
   {

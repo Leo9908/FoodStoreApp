@@ -9,7 +9,7 @@
         shrink
         stretch
       >
-        <q-route-tab name="food" to="/home" :label="$t(`index_tab.food`)" />
+        <q-route-tab name="food" to="/" :label="$t(`index_tab.food`)" />
         <q-route-tab
           name="most_sold"
           to="/most-sold"

@@ -13,8 +13,17 @@ export default {
                 your home.`,
   description2: `Glad hearts through our
                  food is our purpose in life.`,
+  buttons_labels: {
+    confirm: "Confirm",
+    cancel: "Cancel",
+    accept: "Accept",
+    save: "Save",
+  },
   login_card: {
     login: "Log in",
+    logout: "Log out",
+    logoutInfo: "Do you want to log out?",
+    logoutMessage: "The session has been closed",
     register: "Create Account",
     userExist: "The user already exists",
     registerOk: "You have successfully registered",
@@ -74,16 +83,41 @@ export default {
     subtitle4: "the best option for the family",
   },
   edit_profile: {
-    name: "Name",
-    last_name: "Last name",
-    email: "Email",
-    phone: "Phone",
+    title: "About me",
     municipality: "Municipality",
     address: "Address",
     addressList: {
       name: "Addresses",
       add: "add address",
       subtitle: "My addresses",
+    },
+    tabs: {
+      basicInfo: "Basic information",
+      addresses: "Delivery addresses",
+    },
+    table: {
+      title: "Information",
+      name: "Name",
+      last_name: "Last name",
+      email: "Email",
+      phone: "Phone",
+      noPhone: "No phone",
+    },
+    edited: "Edited field",
+    noEdited: "Could not edit field",
+    hints: {
+      email: "Enter your email",
+      phone: "Enter your phone",
+    },
+  },
+  addresses: {
+    table: {
+      title: "Your addresses",
+      columns: {
+        alias: "Alias",
+        address: "Address",
+        apto: "Apartment",
+      },
     },
   },
   hints: {

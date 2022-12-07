@@ -32,6 +32,10 @@ export const useMapsStore = defineStore("maps", {
     getSelectedsAddress(state) {
       return state.selectedsAddress;
     },
+    existAddress(state) {
+      return (addresId) =>
+        state.addresses.find((address) => address.id == addresId) != null;
+    },
   },
 
   actions: {

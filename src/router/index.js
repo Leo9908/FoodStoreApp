@@ -41,6 +41,9 @@ export default route(function (/* { store, ssrContext } */) {
     if (auth.isAutenticatedNow && to.path.includes("auth")) {
       return { path: "/" };
     }
+    if (!auth.isAutenticatedNow && to.path.includes("profile")) {
+      return { path: "/" };
+    }
   });
 
   return Router;

@@ -14,8 +14,16 @@ export default {
   description2: `Alegrar corazones mediante
                  nuestra comida, es nuestro
                  proposito en la vida.`,
+  buttons_labels: {
+    confirm: "Confirmar",
+    cancel: "Cancelar",
+    accept: "Aceptar",
+  },
   login_card: {
     login: "Iniciar sesión",
+    logout: "Cerrar sesión",
+    logoutInfo: "¿Usted desea cerrar la sesión?",
+    logoutMessage: "La sesión se ha cerrado",
     register: "Crear cuenta",
     userExist: "El usuario ya existe",
     ok: "Usted se ha registrado correctamente",
@@ -76,16 +84,37 @@ export default {
     subtitle4: "la mejor opción para la familia",
   },
   edit_profile: {
-    name: "Nombre",
-    last_name: "Apellidos",
-    email: "Correo",
-    phone: "Teléfono",
+    title: "Sobre mí",
     municipality: "Municipio",
     address: "Dirección",
     addressList: {
       name: "Direcciones",
       add: "Añadir dirección",
       subtitle: "Mis direcciones",
+    },
+    tabs: {
+      basicInfo: "Información básica",
+      addresses: "Direcciones de entrega",
+    },
+    table: {
+      title: "Información",
+      name: "Nombre",
+      last_name: "Apellidos",
+      email: "Correo electrónico",
+      phone: "Teléfono",
+      noPhone: "Sin teléfono",
+    },
+    edited: "Campo editado",
+    noEdited: "No se ha podido editar el campo",
+  },
+  addresses: {
+    table: {
+      title: "Sus direcciones",
+      columns: {
+        alias: "Alias",
+        address: "Dirección",
+        apto: "Apartamento",
+      },
     },
   },
   hints: {
