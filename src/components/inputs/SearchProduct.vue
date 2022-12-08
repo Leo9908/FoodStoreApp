@@ -1,6 +1,7 @@
 <template>
   <div>
     <q-input
+      class="search"
       dense
       rounded
       outlined
@@ -8,6 +9,7 @@
       v-model="search"
       :placeholder="$t(`index.search`)"
       clearable
+      @keyup.enter="searchProducts"
     >
       <template v-slot:after>
         <q-btn round dense flat icon="search" @click="searchProducts()" />

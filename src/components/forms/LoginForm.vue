@@ -11,7 +11,7 @@
               v-model="nameuser"
               label="Your user name or email *"
               :rules="[
-                (val) => (val && val.length > 0) || 'Please type something',
+                (val) => (val && val.length > 0) || $t(`errors.emptyField`),
               ]"
             />
             <q-input
@@ -19,7 +19,7 @@
               label="Your password *"
               :type="isPwd ? 'password' : 'text'"
               :rules="[
-                (val) => (val && val.length > 0) || 'Please type something',
+                (val) => (val && val.length > 0) || $t(`errors.emptyField`),
               ]"
             >
               <template v-slot:append>

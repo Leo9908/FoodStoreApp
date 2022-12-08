@@ -1,51 +1,32 @@
 <template>
   <div class="q-pa-md">
+    <div class="q-pa-sm" align="right">
+      <q-btn
+        class="bg-grey-4"
+        flat
+        bordered
+        icon="add"
+        :label="$t(`addresses.actions.add`)"
+        @click="$emit(`add`)"
+      />
+    </div>
     <q-table
-      class="no-shadow q-px-sm"
+      class="no-shadow q-px-sm q-mb-xl"
       :title="$t(`addresses.table.title`)"
       :rows="rows"
       :columns="columns"
       row-key="alias"
-      binary-state-sort
       bordered
+      selection="single"
     >
-      <template v-slot:body="props">
-        <q-tr :props="props">
-          <q-td key="alias" :props="props">
-            {{ props.row.alias }}
-            <q-popup-edit v-model="props.row.alias" v-slot="scope">
-              <q-input v-model="scope.value" dense autofocus counter />
-            </q-popup-edit>
-          </q-td>
-          <q-td key="formatted" :props="props">
-            {{ props.row.formatted }}
-            <q-popup-edit
-              v-model="props.row.formatted"
-              title="Update formatted"
-              buttons
-              v-slot="scope"
-            >
-              <q-input type="textarea" v-model="scope.value" dense autofocus />
-            </q-popup-edit>
-          </q-td>
-          <q-td key="apto" :props="props">
-            <div class="text-pre-wrap">{{ props.row.apto }}</div>
-            <q-popup-edit v-model="props.row.apto" v-slot="scope">
-              <q-input type="textarea" v-model="scope.value" dense autofocus />
-            </q-popup-edit>
-          </q-td>
-          <q-td key="action" :props="props">
-            <div class="text-pre-wrap">
-              <q-btn
-                flat
-                round
-                size="12px"
-                icon="chevron_right"
-                @click="editAddress(props.row.id)"
-              />
-            </div>
-          </q-td>
-        </q-tr>
+      <template v-slot:body-selection="scope">
+        <q-btn
+          flat
+          round
+          size="10px"
+          icon="arrow_forward_ios"
+          @click="$emit(`select`, scope.row.id)"
+        />
       </template>
     </q-table>
   </div>
@@ -62,10 +43,10 @@ export default defineComponent({
       columns: [
         {
           name: "alias",
+          field: "alias",
           required: true,
           label: t("addresses.table.columns.alias"),
           align: "left",
-          field: (row) => row.name,
           format: (val) => `${val}`,
           sortable: true,
         },
@@ -82,11 +63,6 @@ export default defineComponent({
           style: "width: 150px",
           align: "left",
         },
-        {
-          name: "action",
-          field: "action",
-          style: "width: 20px",
-        },
       ],
     };
   },
@@ -95,11 +71,6 @@ export default defineComponent({
   },
   setup() {
     return {};
-  },
-  methods: {
-    editAddress(id) {
-      this.$emit("select", id);
-    },
   },
 });
 </script>

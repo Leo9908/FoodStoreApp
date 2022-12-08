@@ -14,7 +14,7 @@
               v-model="nameuserOrEmail"
               label="Your user name or email *"
               :rules="[
-                (val) => (val && val.length > 0) || 'Please type something',
+                (val) => (val && val.length > 0) || $t(`errors.emptyField`),
               ]"
             />
             <div>

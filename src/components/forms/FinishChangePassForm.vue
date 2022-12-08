@@ -11,7 +11,10 @@
               v-model="password"
               label="Your password *"
               :type="isPwd ? 'password' : 'text'"
-              :rules="[(val) => val.length >= 8 || $t(`errors.digites`, [8])]"
+              :rules="[
+                (val) => (val && val.length > 0) || $t(`errors.emptyField`),
+                (val) => val.length >= 8 || $t(`errors.digites`, [8]),
+              ]"
               dense
             >
               <template v-slot:append>
@@ -26,6 +29,7 @@
               label="Confirm your password *"
               :type="isPwd ? 'password' : 'text'"
               :rules="[
+                (val) => (val && val.length > 0) || $t(`errors.emptyField`),
                 (val) => val.length >= 8 || $t(`errors.digites`, [8]),
                 (val) => val == password || $t(`login_card.noEquals`),
               ]"
@@ -57,32 +61,36 @@
 <script>
 import { Notify } from "quasar";
 import { useAuthStore } from "src/stores/auth";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, toRefs } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
 
 export default defineComponent({
-  setup() {
-    const route = useRoute();
-    const router = useRouter();
+  props: {
+    token: { type: String, required: true },
+  },
+  setup(props, ctx) {
     const password = ref(null);
     const confirmPassword = ref(null);
     const auth = useAuthStore();
     const { changePassword } = auth;
     const { t } = useI18n();
+    const { token } = toRefs(props);
     return {
-      router,
       password,
       confirmPassword,
       isPwd: ref(true),
       async onSubmit() {
         try {
-          await changePassword(password.value, confirmPassword.value, route);
+          await changePassword(
+            password.value,
+            confirmPassword.value,
+            token.value
+          );
           Notify.create({
             color: "info",
             message: t("login_card.changedPass"),
           });
-          router.push({ path: "/auth/login" });
+          ctx.emit("select");
         } catch (error) {
           console.log(error);
           Notify.create({

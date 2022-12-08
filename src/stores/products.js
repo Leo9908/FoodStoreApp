@@ -71,7 +71,6 @@ export const useProductsStore = defineStore("products", {
         .then((response) => {
           this.isSearching = true;
           this.searchedDishes = response.data;
-          console.log(this.searchedDishes);
         })
         .catch((error) => {
           console.log(error);

@@ -21,7 +21,10 @@
         <carousel-index-vue class="carousel" />
       </div>
       <div class="row justify-center q-py-md">
-        <SearchProductVue class="col-4" />
+        <SearchProductVue
+          class="col-4"
+          :style="isMobile ? `width: 220px` : `width: 500px`"
+        />
       </div>
     </section>
     <FooterIndexVue class="absolute-bottom" />
@@ -48,6 +51,7 @@ import { useAuthStore } from "stores/auth";
 import { storeToRefs } from "pinia";
 
 import { useOrdersStore } from "src/stores/orders";
+import { useQuasar } from "quasar";
 
 export default defineComponent({
   name: "MainLayout",
@@ -66,10 +70,12 @@ export default defineComponent({
     const { inicial } = storeToRefs(auth);
     const order = useOrdersStore();
     const { total } = storeToRefs(order);
+    const $q = useQuasar();
     return {
       inicial,
       search: ref(null),
       total,
+      isMobile: $q.platform.is.mobile,
     };
   },
 });

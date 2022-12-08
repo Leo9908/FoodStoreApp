@@ -64,6 +64,7 @@
           icon-selected="star"
           icon-half="star_half"
           no-dimming
+          no-reset
         />
       </div>
     </q-card-section>

@@ -106,6 +106,10 @@ export default {
     },
     edited: "Campo editado",
     noEdited: "No se ha podido editar el campo",
+    hints: {
+      email: "Entre su correo",
+      phone: "Entre su teléfono",
+    },
   },
   addresses: {
     table: {
@@ -116,15 +120,26 @@ export default {
         apto: "Apartamento",
       },
     },
+    actions: {
+      edited: "Dirección editada",
+      add: "Agregar dirección",
+      added: "Dirección añadida",
+    },
+    errors: {
+      noEdited: "Error al editar la dirección",
+      noAdded: "Error durante de adición de la dirección",
+    },
   },
   hints: {
     range: "Introduzca un número entre {0} y {1}",
   },
   errors: {
-    digites: `Must have more than {0} digits`,
+    digites: `Debe tener más de {0} dígitos`,
+    digites2: `Por favor, use {0} caracteres`,
     range: `¡El valor debe estar entre {0} y {1}!`,
     letters: `Debe contener {0}`,
     emptyField: "Por favor escriba algo",
+    required: "Campo obligatorio",
   },
   add_address: {
     city: "Ciudad",

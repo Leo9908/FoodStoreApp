@@ -8,20 +8,10 @@ import { useAuthStore } from "./auth";
 
 export const useMapsStore = defineStore("maps", {
   state: () => ({
-    address: {
-      alias: ref(null),
-      formatted: ref(null),
-      apto: ref(null),
-      latitude: ref(null),
-      longitude: ref(null),
-    },
     addresses: [],
   }),
 
   getters: {
-    getAddress(state) {
-      return state.address;
-    },
     getAddresses(state) {
       return state.addresses;
     },
@@ -39,13 +29,13 @@ export const useMapsStore = defineStore("maps", {
   },
 
   actions: {
-    locator() {
+    locator(address) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           (position) => {
-            this.address.latitude = position.coords.latitude;
-            this.address.longitude = position.coords.longitude;
-            this.getAddressFrom();
+            address.latitude = position.coords.latitude;
+            address.longitude = position.coords.longitude;
+            this.getAddressFrom(address);
           },
           (error) => {
             Notify.create({
@@ -58,15 +48,13 @@ export const useMapsStore = defineStore("maps", {
         console.log("El navegador no soporta la geolocalización");
       }
     },
-    getAddressFrom() {
-      api
+    async getAddressFrom(address) {
+      await api
         .get(
-          `https://api.opencagedata.com/geocode/v1/json?q=${this.address.latitude}+${this.address.longitude}&key=b22fc82a13744ba4a362ab666ee194f9`
+          `https://api.opencagedata.com/geocode/v1/json?q=${address.latitude}+${address.longitude}&key=b22fc82a13744ba4a362ab666ee194f9`
         )
         .then((response) => {
-          console.log(response);
-          this.address.formatted = response.data.results[0].formatted;
-          console.log(response.data.results[0].formatted);
+          address.formatted = response.data.results[0].formatted;
         })
         .catch((error) => {
           Notify.create({
@@ -75,27 +63,13 @@ export const useMapsStore = defineStore("maps", {
           });
         });
     },
-    setAddress() {
-      if (this.address != null) {
-        /**
-         * Esto es para formar la dirección definitiva para que se guarde toda junta
-         * en la BD
-         */
+    async setAddress(address) {
+      if (address != null) {
         const user = useAuthStore();
-        api
-          .post(`/users/edit/${user.me.id}/address`, this.address)
+        await api
+          .post(`/users/edit/${user.me.id}/address`, address)
           .then(() => {
             this.getAllAddress();
-            Notify.create({
-              message: "Submited",
-              color: "info",
-            });
-          })
-          .catch((error) => {
-            Notify.create({
-              message: "" + error,
-              color: "warning",
-            });
           });
       } else {
         console.log("La dirección es nula");
@@ -115,13 +89,6 @@ export const useMapsStore = defineStore("maps", {
           });
         });
     },
-    removeAddress() {
-      this.address.alias = " ";
-      this.address.apto = " ";
-      this.address.formatted = " ";
-      this.address.latitude = " ";
-      this.address.longitude = " ";
-    },
     deleteAddress(addressId) {
       const user = useAuthStore();
       api
@@ -140,32 +107,19 @@ export const useMapsStore = defineStore("maps", {
           });
         });
     },
-    updateAddress(address) {
-      const user = useAuthStore();
-      api
-        .put(`/users/${user.me.id}/address/${address.id}`, address)
-        .then(() => {
-          Notify.create({
-            message: "Done",
-            color: "info",
+    async updateAddress(editedAddress) {
+      if (editedAddress.id != undefined) {
+        const user = useAuthStore();
+        await api
+          .put(
+            `/users/${user.me.id}/address/${editedAddress.id}`,
+            editedAddress
+          )
+          .then(() => {
+            this.getAllAddress();
           });
-        })
-        .catch((error) => {
-          Notify.create({
-            message: error,
-            color: "warning",
-          });
-        });
-    },
-    /**
-     * selecciona o deselecciona los address en la lista
-     */
-    selectAddress(addresId, action) {
-      if (action) {
-        this.selectedsAddress.push(addresId);
       } else {
-        const index = this.selectedsAddress.indexOf(addresId);
-        if (index !== -1) this.selectedsAddress.splice(index, 1);
+        this.setAddress(editedAddress);
       }
     },
   },

@@ -7,7 +7,14 @@
           <td class="text-right">
             {{ me.name }}
             <q-popup-edit v-model="me.name" auto-save v-slot="scope">
-              <q-input v-model="scope.value" dense autofocus />
+              <q-input
+                v-model="scope.value"
+                dense
+                autofocus
+                :rules="[
+                  (val) => (val && val.length > 0) || $t(`errors.emptyField`),
+                ]"
+              />
             </q-popup-edit>
           </td>
         </tr>
@@ -16,7 +23,14 @@
           <td class="text-right">
             {{ me.last_name }}
             <q-popup-edit v-model="me.last_name" auto-save v-slot="scope">
-              <q-input v-model="scope.value" dense autofocus />
+              <q-input
+                v-model="scope.value"
+                dense
+                autofocus
+                :rules="[
+                  (val) => (val && val.length > 0) || $t(`errors.emptyField`),
+                ]"
+              />
             </q-popup-edit>
           </td>
         </tr>
@@ -92,6 +106,7 @@ import { useProfileStore } from "src/stores/profile";
 
 import { biGeoAltFill } from "@quasar/extras/bootstrap-icons";
 import { storeToRefs } from "pinia";
+import { rule } from "postcss";
 
 export default defineComponent({
   setup() {

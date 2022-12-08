@@ -12,17 +12,24 @@
         </q-toolbar-title>
       </q-toolbar>
 
-      <q-tabs class="bg-white" inline-label>
+      <q-tabs
+        v-model="tab"
+        dense
+        inline-label
+        class="bg-white text-black"
+        shrink
+        stretch
+      >
         <q-route-tab
+          name="info"
           icon="assignment"
           to="/profile/user-info"
-          replace
           :label="$t(`edit_profile.tabs.basicInfo`)"
         />
         <q-route-tab
+          name="addresses"
           icon="map"
           to="/profile/addresses"
-          replace
           :label="$t(`edit_profile.tabs.addresses`)"
         />
       </q-tabs>
@@ -49,6 +56,7 @@ export default {
     return {
       router,
       biArrowLeft,
+      tab: ref("info"),
       goBack() {
         router.push({ path: "/" });
       },

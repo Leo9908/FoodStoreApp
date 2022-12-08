@@ -2,7 +2,12 @@
   <q-page padding>
     <!-- content -->
     <div class="q-mx-xl">
-      <addresses-table :rows="getAddresses" @select="setSelectedAddress" />
+      <addresses-table
+        :rows="getAddresses"
+        @select="editAddress"
+        @add="addAddress"
+      />
+      <router-view />
     </div>
   </q-page>
 </template>
@@ -25,8 +30,11 @@ export default {
     return {
       router,
       getAddresses,
-      setSelectedAddress(id) {
-        router.push({ path: `/profile/address/${id}` });
+      editAddress(id) {
+        router.push({ name: "editAddress", params: { id: id } });
+      },
+      addAddress() {
+        router.push({ name: "addAddress" });
       },
     };
   },

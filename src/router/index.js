@@ -1,5 +1,6 @@
 import { route } from "quasar/wrappers";
 import { useAuthStore } from "src/stores/auth";
+import { useProfileStore } from "src/stores/profile";
 import {
   createRouter,
   createMemoryHistory,
@@ -44,6 +45,8 @@ export default route(function (/* { store, ssrContext } */) {
     if (!auth.isAutenticatedNow && to.path.includes("profile")) {
       return { path: "/" };
     }
+    const profile = useProfileStore();
+    //Aquí va la lógica para que no se puede entrar al Admin sin tener el rol
   });
 
   return Router;

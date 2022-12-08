@@ -119,15 +119,26 @@ export default {
         apto: "Apartment",
       },
     },
+    actions: {
+      edited: "Edited address",
+      add: "Add Address",
+      added: "Added address",
+    },
+    errors: {
+      noEdited: "Error while editing address",
+      noAdded: "Error during add address",
+    },
   },
   hints: {
     range: "Enter a number between {0} and {1}",
   },
   errors: {
-    digites: `Must have more than {0} digits`,
+    digites: `Please use more than {0} characters`,
+    digites2: `Please use {0} characters`,
     range: `The value must be between {0} and {1}!`,
     letters: `Must contain {0}`,
     emptyField: "Please type something",
+    required: "Field is required",
   },
   add_address: {
     apto: "Apartment",

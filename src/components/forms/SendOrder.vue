@@ -10,18 +10,12 @@
         color="primary"
         filled
         :label="$t(`orders.form.addresses`)"
-        @click="order.generateAddressOptions()"
+        @focus="order.generateAddressOptions()"
         :disable="!isAutenticatedNow"
         use-chips
-        :rules="[(val) => val.length > 0 || 'Field is required']"
+        :rules="[(val) => val.length > 0 || $t(`errors.required`)]"
         ><template v-slot:after>
-          <q-btn
-            round
-            dense
-            flat
-            icon="add"
-            @click="openFormAddAddress()"
-          /> </template
+          <q-btn round dense flat icon="add" @click="addAddress()" /> </template
       ></q-select>
       <q-input
         name="selected_phone"
@@ -29,8 +23,8 @@
         color="primary"
         filled
         :rules="[
-          (val) => !!val || 'Field is required',
-          (val) => val.length >= 8 || 'Please use more than 8 characters',
+          (val) => !!val || $t(`errors.required`),
+          (val) => val.length >= 8 || $t(`errors.digites`, [8]),
         ]"
         lazy-rules
         mask="(##) ### - ###"
@@ -103,7 +97,7 @@ export default defineComponent({
       this.order.generateAddressOptions();
     }
   },
-  setup() {
+  setup(props, ctx) {
     const submitEmpty = ref(false);
     const submitResult = ref([]);
 
@@ -168,14 +162,12 @@ export default defineComponent({
           });
         }
       },
+      addAddress() {
+        ctx.emit("select");
+      },
     };
   },
   methods: {
-    openFormAddAddress() {
-      console.log("Acción 1");
-      this.$bus.emit("open-dialog");
-      this.$bus.emit("go_back", 3);
-    },
     openFormAddPhone() {
       console.log("Acción 2");
     },

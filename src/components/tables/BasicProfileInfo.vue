@@ -33,6 +33,7 @@
               v-model="user.name"
               buttons
               v-slot="scope"
+              :validate="() => !$refs.myInput.hasError"
             >
               <q-input
                 v-model="scope.value"
@@ -40,6 +41,8 @@
                 autofocus
                 counter
                 @keyup.enter="scope.set"
+                ref="myInput"
+                :rules="[(val) => !!val || $t(`errors.required`)]"
               />
             </q-popup-edit>
           </td>
@@ -62,6 +65,7 @@
               :label-set="$t(`buttons_labels.save`)"
               :label-cancel="$t(`buttons_labels.cancel`)"
               v-slot="scope"
+              :validate="() => !$refs.myInput.hasError"
             >
               <q-input
                 v-model="scope.value"
@@ -69,6 +73,8 @@
                 autofocus
                 counter
                 @keyup.enter="scope.set"
+                ref="myInput"
+                :rules="[(val) => !!val || $t(`errors.required`)]"
               />
             </q-popup-edit>
           </td>
@@ -90,19 +96,20 @@
               buttons
               :label-set="$t(`buttons_labels.save`)"
               :label-cancel="$t(`buttons_labels.cancel`)"
-              :validate="emailValidation"
-              @hide="emailValidation"
+              :validate="() => !$refs.myInput.hasError"
               v-slot="scope"
             >
               <q-input
                 type="email"
                 v-model="scope.value"
                 :hint="$t(`edit_profile.hints.email`)"
-                :error="errorEmail"
-                :error-message="errorMessageEmail"
                 dense
                 autofocus
                 @keyup.enter="scope.set"
+                ref="myInput"
+                :rules="[
+                  (value) => value.includes('@') || $t(`errors.letters`, [`@`]),
+                ]"
               />
             </q-popup-edit>
           </td>
@@ -125,8 +132,7 @@
               v-model="user.phone"
               buttons
               v-slot="scope"
-              :validate="phoneValidation"
-              @hide="phoneValidation"
+              :validate="() => !$refs.myInput.hasError"
             >
               <q-input
                 v-model="scope.value"
@@ -134,11 +140,13 @@
                 autofocus
                 counter
                 :hint="$t(`edit_profile.hints.phone`)"
-                :error="errorPhone"
-                :error-message="errorMessagePhone"
                 mask="(##) ### - ###"
                 unmasked-value
                 @keyup.enter="scope.set"
+                ref="myInput"
+                :rules="[
+                  (val) => val.length >= 8 || $t(`errors.digites2`, [8]),
+                ]"
               />
             </q-popup-edit>
           </td>
@@ -157,7 +165,6 @@ import { defineComponent, ref } from "vue";
 import { useProfileStore } from "src/stores/profile";
 import { storeToRefs } from "pinia";
 import { Notify, useQuasar } from "quasar";
-import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   setup() {
@@ -165,42 +172,12 @@ export default defineComponent({
     const { getUser } = storeToRefs(profile);
     const { editUser } = profile;
     const user = getUser;
-    const { t } = useI18n();
     const $q = useQuasar();
-    const errorEmail = ref(false);
-    const errorMessageEmail = ref("");
-    const errorPhone = ref(false);
-    const errorMessagePhone = ref("");
     return {
       user,
       editUser,
       isMobile: $q.platform.is.mobile,
       isDesktop: $q.platform.is.desktop,
-      errorEmail,
-      errorMessageEmail,
-      errorPhone,
-      errorMessagePhone,
-      emailValidation(val) {
-        if (!val?.includes("@")) {
-          errorEmail.value = true;
-          errorMessageEmail.value = t("errors.letters", ["@"]);
-          return false;
-        }
-        errorEmail.value = false;
-        errorMessageEmail.value = "";
-        return true;
-      },
-      phoneValidation(val) {
-        const result = val ? val.toString() : "";
-        if (result.length < 8) {
-          errorPhone.value = true;
-          errorMessagePhone.value = t("errors.digites", [8]);
-          return false;
-        }
-        errorPhone.value = false;
-        errorMessagePhone.value = "";
-        return true;
-      },
     };
   },
   watch: {

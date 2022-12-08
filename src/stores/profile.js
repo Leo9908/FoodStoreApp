@@ -16,6 +16,9 @@ export const useProfileStore = defineStore("profile", {
     getPhone(state) {
       return state.me.phone;
     },
+    getRole(state) {
+      return state.me.roles.pop().name;
+    },
   },
 
   actions: {

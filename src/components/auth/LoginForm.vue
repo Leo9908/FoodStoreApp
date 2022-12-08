@@ -4,13 +4,13 @@
       <q-input
         v-model="nameuser"
         label="Your user name *"
-        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
       />
       <q-input
         v-model="password"
         label="Your password *"
         :type="isPwd ? 'password' : 'text'"
-        :rules="[(val) => (val && val.length > 0) || 'Please type something']"
+        :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
       >
         <template v-slot:append>
           <q-icon

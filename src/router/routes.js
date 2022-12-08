@@ -23,6 +23,7 @@ const routes = [
       {
         path: "finish-change-password/:tokenPassword",
         component: () => import("pages/FinishChangePassPage.vue"),
+        props: true,
       },
     ],
   },
@@ -31,12 +32,29 @@ const routes = [
     component: () => import("layouts/ProfileLayout.vue"),
     children: [
       { path: "user-info", component: () => import("src/pages/UserInfo.vue") },
-      { path: "addresses", component: () => import("pages/AddressesPage.vue") },
       {
-        path: "address/:id",
-        component: () => import("src/pages/EditAddressPage.vue"),
+        path: "addresses",
+        children: [
+          { path: "", component: () => import("pages/AddressesPage.vue") },
+          {
+            name: "editAddress",
+            path: "address/:id",
+            component: () => import("src/pages/EditAddAddressPage.vue"),
+            props: (route) => ({ id: parseInt(route.params.id) }),
+          },
+          {
+            name: "addAddress",
+            path: "create",
+            component: () => import("src/pages/EditAddAddressPage.vue"),
+          },
+        ],
       },
     ],
+  },
+  {
+    path: "/admin/",
+    name: "management",
+    component: () => import("layouts/MainAdminLayout.vue"),
   },
   // Always leave this as last one,
   // but you can also remove it

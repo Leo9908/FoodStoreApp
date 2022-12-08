@@ -103,11 +103,11 @@ export const useAuthStore = defineStore("auth", {
         .post("/auth/email/send-email", { emailTo: email })
         .then((response) => {});
     },
-    async changePassword(password, confirmPassword, route) {
+    async changePassword(password, confirmPassword, token) {
       await api.post("/auth/email/change-password", {
         password: password,
         confirmPassword: confirmPassword,
-        tokenPassword: route.params.tokenPassword,
+        tokenPassword: token,
       });
     },
   },
