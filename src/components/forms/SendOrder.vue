@@ -38,7 +38,7 @@
             dense
             flat
             icon="add"
-            @click="!getPhone == null ? (phone = getPhone) : openFormAddPhone()"
+            @click="phone = getPhone"
           /> </template
       ></q-input>
       <div>

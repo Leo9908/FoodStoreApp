@@ -1,105 +1,110 @@
 <template>
-  <q-layout view="hHh Lpr fFf"> <!-- Be sure to play with the Layout demo on docs -->
-
-    <!-- (Optional) The Header -->
-    <q-header elevated>
+  <q-layout view="hHh lpR lFf">
+    <q-header class="bg-primary text-white">
       <q-toolbar>
-        <q-btn
-          flat
-          round
-          dense
-          icon="menu"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
-          Header
+          <q-avatar>
+            <img src="src/assets/icons/chef_hat.png" />
+          </q-avatar>
+          {{ $t("admin.title") }}
         </q-toolbar-title>
+        <div>
+          <language-select-vue />
+        </div>
+        <div>
+          <avatar-icon-vue />
+        </div>
       </q-toolbar>
-
-      <q-tabs>
-        <q-route-tab
-          icon="map"
-          to="/your/route"
-          replace
-          label="One Tab"
-        />
-        <q-route-tab
-          icon="assignment"
-          to="/some/other/route"
-          replace
-          label="Other Tab"
-        />
-      </q-tabs>
     </q-header>
 
-    <!-- (Optional) The Footer -->
-    <q-footer>
-      <q-tabs switch-indicator>
-        <q-route-tab
-          icon="map"
-          to="/your/route"
-          replace
-          label="One Tab"
-        />
-        <q-route-tab
-          icon="assignment"
-          to="/some/other/route"
-          replace
-          label="Other Tab"
-        />
-      </q-tabs>
+    <q-drawer bordered v-model="leftDrawerOpen" show-if-above :breakpoint="500">
+      <q-scroll-area class="fit">
+        <q-list padding class="menu-list">
+          <q-item
+            clickable
+            v-ripple
+            @click="router.push({ name: `adminProducts` })"
+          >
+            <q-item-section avatar>
+              <q-icon name="restaurant_menu" />
+            </q-item-section>
 
-      <q-toolbar>
-        <q-btn
-          flat
-          round
-          dense
-          icon="menu"
-          @click="toggleLeftDrawer"
-        />
-        <q-toolbar-title>
-          Footer
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-footer>
+            <q-item-section>
+              {{ $t("admin.drawer.item1") }}
+            </q-item-section>
+          </q-item>
 
-    <!-- (Optional) A Drawer; you can add one more with side="right" or change this one's side -->
-    <q-drawer
-      v-model="leftDrawerOpen"
-      side="left"
-      bordered
-      class="bg-grey-2"
-    >
-      <!-- QScrollArea is optional -->
-      <q-scroll-area class="fit q-pa-sm">
-        <!-- Content here -->
+          <q-item clickable v-ripple @click="router.push({ name: `reports` })">
+            <q-item-section avatar>
+              <q-icon name="assignment" />
+            </q-item-section>
+
+            <q-item-section>
+              {{ $t("admin.drawer.item2") }}
+            </q-item-section>
+          </q-item>
+
+          <q-item clickable v-ripple @click="router.push({ name: `home` })">
+            <q-item-section avatar>
+              <q-icon name="store" />
+            </q-item-section>
+
+            <q-item-section> {{ $t("admin.drawer.item3") }} </q-item-section>
+          </q-item>
+
+          <q-item clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon name="drafts" />
+            </q-item-section>
+
+            <q-item-section> Drafts </q-item-section>
+          </q-item>
+        </q-list>
       </q-scroll-area>
     </q-drawer>
 
     <q-page-container>
-      <!-- This is where pages get injected -->
       <router-view />
     </q-page-container>
-
   </q-layout>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref } from "vue";
+
+import AvatarIconVue from "src/components/AvatarIcon.vue";
+import LanguageSelectVue from "src/components/selects/LanguageSelect.vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "src/stores/auth";
 
 export default {
-  // name: 'LayoutName',
-
-  setup () {
-    const leftDrawerOpen = ref(false)
-
+  components: {
+    AvatarIconVue,
+    LanguageSelectVue,
+  },
+  beforeRouteEnter(to, from) {
+    const auth = useAuthStore();
+    if (!auth.isAutenticatedNow || !auth.isAdmin) {
+      return false;
+    }
+  },
+  setup() {
+    const leftDrawerOpen = ref(false);
+    const router = useRouter();
     return {
       leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
-    }
-  }
-}
+      router,
+      toggleLeftDrawer() {
+        leftDrawerOpen.value = !leftDrawerOpen.value;
+      },
+    };
+  },
+};
 </script>
+<style lang="scss" scoped>
+.menu-list .q-item {
+  border-radius: 0 32px 32px 0;
+}
+</style>

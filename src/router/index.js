@@ -1,6 +1,6 @@
+import { storeToRefs } from "pinia";
 import { route } from "quasar/wrappers";
 import { useAuthStore } from "src/stores/auth";
-import { useProfileStore } from "src/stores/profile";
 import {
   createRouter,
   createMemoryHistory,
@@ -36,17 +36,17 @@ export default route(function (/* { store, ssrContext } */) {
 
   Router.beforeEach((to, from) => {
     const auth = useAuthStore();
-    if (!auth.isAutenticatedNow && to.path == "/favorite") {
+    if (
+      !auth.isAutenticatedNow &&
+      (to.path == "/favorite" ||
+        to.path.includes("profile") ||
+        to.path.includes("admin"))
+    ) {
       return { path: "/" };
     }
     if (auth.isAutenticatedNow && to.path.includes("auth")) {
-      return { path: "/" };
+      return false;
     }
-    if (!auth.isAutenticatedNow && to.path.includes("profile")) {
-      return { path: "/" };
-    }
-    const profile = useProfileStore();
-    //Aquí va la lógica para que no se puede entrar al Admin sin tener el rol
   });
 
   return Router;

@@ -106,7 +106,6 @@ import { useProfileStore } from "src/stores/profile";
 
 import { biGeoAltFill } from "@quasar/extras/bootstrap-icons";
 import { storeToRefs } from "pinia";
-import { rule } from "postcss";
 
 export default defineComponent({
   setup() {

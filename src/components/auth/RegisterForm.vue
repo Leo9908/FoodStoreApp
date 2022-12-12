@@ -3,26 +3,26 @@
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
       <q-input
         v-model="name"
-        label="Your name *"
+        :label="$t(`login_card.fields.name`)"
         :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
         dense
       />
       <q-input
         v-model="last_name"
-        label="Your last name *"
+        :label="$t(`login_card.fields.last_name`)"
         :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
         dense
       />
       <q-input
         v-model="email"
         type="email"
-        label="Your email *"
+        :label="$t(`login_card.fields.email`)"
         :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
         dense
       />
       <q-input
         v-model="password"
-        label="Your password *"
+        :label="$t(`login_card.fields.pass`)"
         :type="isPwd ? 'password' : 'text'"
         :rules="[(val) => val.length >= 8 || $t(`errors.digites`, [8])]"
         dense
@@ -38,9 +38,9 @@
       <q-toggle v-model="accept" label="I accept the license and terms" />
 
       <div>
-        <q-btn label="Submit" type="submit" color="primary" />
+        <q-btn :label="$t(`login_card.login`)" type="submit" color="primary" />
         <q-btn
-          label="Reset"
+          :label="$t(`buttons_labels.reset`)"
           type="reset"
           color="primary"
           flat

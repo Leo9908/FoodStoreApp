@@ -160,86 +160,52 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, toRefs } from "vue";
 
 import { useProfileStore } from "src/stores/profile";
-import { storeToRefs } from "pinia";
 import { Notify, useQuasar } from "quasar";
 
 export default defineComponent({
-  setup() {
-    const profile = useProfileStore();
-    const { getUser } = storeToRefs(profile);
-    const { editUser } = profile;
-    const user = getUser;
-    const $q = useQuasar();
+  props: {
+    me: {
+      type: Object,
+      required: true,
+    },
+  },
+  data(props) {
+    const user = Object.assign({}, props.me);
     return {
       user,
+    };
+  },
+  setup() {
+    const profile = useProfileStore();
+    const { editUser } = profile;
+    const $q = useQuasar();
+    return {
       editUser,
       isMobile: $q.platform.is.mobile,
       isDesktop: $q.platform.is.desktop,
     };
   },
   watch: {
-    async "user.name"() {
-      try {
-        this.editUser(this.user);
-        Notify.create({
-          color: "info",
-          message: this.$t("edit_profile.edited"),
-        });
-      } catch (error) {
-        console.log(error);
-        Notify.create({
-          color: "warning",
-          message: this.$t("edit_profile.noEdited"),
-        });
-      }
-    },
-    async "user.last_name"() {
-      try {
-        this.editUser(this.user);
-        Notify.create({
-          color: "info",
-          message: this.$t("edit_profile.edited"),
-        });
-      } catch (error) {
-        console.log(error);
-        Notify.create({
-          color: "warning",
-          message: this.$t("edit_profile.noEdited"),
-        });
-      }
-    },
-    async "user.email"() {
-      try {
-        this.editUser(this.user);
-        Notify.create({
-          color: "info",
-          message: this.$t("edit_profile.edited"),
-        });
-      } catch (error) {
-        console.log(error);
-        Notify.create({
-          color: "warning",
-          message: this.$t("edit_profile.noEdited"),
-        });
-      }
-    },
-    async "user.phone"() {
-      try {
-        this.editUser(this.user);
-        Notify.create({
-          color: "info",
-          message: this.$t("edit_profile.edited"),
-        });
-      } catch (error) {
-        console.log(error);
-        Notify.create({
-          color: "warning",
-          message: this.$t("edit_profile.noEdited"),
-        });
-      }
+    user: {
+      handler: async function () {
+        try {
+          await this.editUser(this.user);
+          Notify.create({
+            color: "info",
+            message: this.$t("edit_profile.edited"),
+          });
+        } catch (error) {
+          console.log(error);
+          Notify.create({
+            color: "warning",
+            message: this.$t("edit_profile.noEdited"),
+          });
+        }
+      },
+      deep: true,
     },
   },
 });

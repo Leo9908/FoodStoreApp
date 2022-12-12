@@ -9,14 +9,14 @@
           <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
             <q-input
               v-model="nameuser"
-              label="Your user name or email *"
+              :label="$t(`login_card.fields.user`)"
               :rules="[
                 (val) => (val && val.length > 0) || $t(`errors.emptyField`),
               ]"
             />
             <q-input
               v-model="password"
-              label="Your password *"
+              :label="$t(`login_card.fields.pass`)"
               :type="isPwd ? 'password' : 'text'"
               :rules="[
                 (val) => (val && val.length > 0) || $t(`errors.emptyField`),
@@ -29,10 +29,14 @@
                   @click="isPwd = !isPwd"
                 /> </template
             ></q-input>
-            <div>
-              <q-btn label="Submit" type="submit" color="primary" />
+            <div class="q-gutter-sm">
               <q-btn
-                label="Reset"
+                :label="$t(`login_card.login`)"
+                type="submit"
+                color="primary"
+              />
+              <q-btn
+                :label="$t(`buttons_labels.reset`)"
                 type="reset"
                 color="primary"
                 flat
@@ -63,7 +67,6 @@
   </div>
 </template>
 <script>
-import { Notify } from "quasar";
 import { useAuthStore } from "src/stores/auth";
 import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -83,22 +86,14 @@ export default defineComponent({
       password,
       isPwd: ref(true),
       async onSubmit() {
-        try {
-          await doLogin({
+        await doLogin(
+          {
             usernameOrEmail: nameuser.value,
             password: password.value,
-          });
-          Notify.create({
-            message: t("login_card.logOk"),
-            color: "info",
-          });
-          router.back();
-        } catch (error) {
-          Notify.create({
-            message: t("login_card.noCorrect"),
-            color: "warning",
-          });
-        }
+          },
+          t,
+          router
+        );
       },
       onReset() {
         nameuser.value = null;

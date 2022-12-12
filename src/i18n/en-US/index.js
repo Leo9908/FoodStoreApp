@@ -14,12 +14,20 @@ export default {
   description2: `Glad hearts through our
                  food is our purpose in life.`,
   buttons_labels: {
+    reset: "Reset",
     confirm: "Confirm",
     cancel: "Cancel",
     accept: "Accept",
     save: "Save",
   },
   login_card: {
+    fields: {
+      user: "Your user name or email",
+      pass: "Your password",
+      name: "Your name ",
+      last_name: "Your last name",
+      email: "Your email",
+    },
     login: "Log in",
     logout: "Log out",
     logoutInfo: "Do you want to log out?",
@@ -45,6 +53,7 @@ export default {
     noEquals: "Passwords must match",
   },
   products: {
+    name: "Product",
     breakfast: "Breakfast",
     lunch: "Lunch",
     dinner: "Dinner",
@@ -146,10 +155,18 @@ export default {
     address: "Address",
   },
   actions: {
-    delete: "Delete",
+    delete: "Delete {0}",
+    add: "Add {0}",
   },
   responses: {
-    deleted: "Deleted",
+    deleted: "{0} removed",
+    edited: "Edited {0}",
+    add: "{0} added",
+    errors: {
+      noDeleted: "Error deleting the {0}",
+      noEdited: "Error editing the {0}",
+      noAdd: "Error adding the {0}",
+    },
   },
   orders: {
     table: {
@@ -165,5 +182,42 @@ export default {
       phone: "Contact",
     },
     send: "Order sent",
+    totalPrice: "Total",
+  },
+  admin: {
+    title: "Gustó Management",
+    drawer: {
+      item1: "Product management",
+      item2: "Sales reports",
+      item3: "Gustó shop",
+    },
+    products: {
+      table: {
+        title: "Products",
+        columns: {
+          c1: "Name",
+          c2: "Price",
+          c3: "Type",
+          c4: "On sale?",
+          c5: "Rating",
+          c6: "Actions",
+          onSale: "Yes",
+          noOnsale: "No",
+        },
+        actions: {
+          a1: "Edit",
+          a2: "Delete",
+          confirm: "Confirm",
+          message: "Do you want to delete the product?",
+          save: "Do you want to exit without saving the product?",
+        },
+      },
+      edit: {
+        title: "Product Edition",
+      },
+      add: {
+        title: "New product",
+      },
+    },
   },
 };

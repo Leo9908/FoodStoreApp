@@ -8,14 +8,14 @@
       >
         <q-input
           v-model="editAddrress.alias"
-          label="Your alias *"
+          :label="$t(`addresses.table.columns.alias`)"
           lazy-rules
           :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
         />
         <q-input
           bottom-slots
           v-model="editAddrress.formatted"
-          label="Your last alias *"
+          :label="$t(`addresses.table.columns.address`)"
           type="textarea"
           :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
         >
@@ -33,7 +33,7 @@
 
         <q-input
           v-model="editAddrress.apto"
-          label="Your last alias *"
+          :label="$t(`addresses.table.columns.apto`)"
           lazy-rules
           :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
         />

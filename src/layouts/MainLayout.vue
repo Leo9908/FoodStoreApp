@@ -4,12 +4,16 @@
       <q-toolbar>
         <q-toolbar-title class="title text-h4 q-ml-none q-mt-xs q-pl-none row">
           <div>
-            <q-img src="../assets/icon-chef.png" height="70px" width="140px" />
+            <q-img
+              src="../assets/icons/icon-chef.png"
+              height="70px"
+              width="140px"
+            />
           </div>
         </q-toolbar-title>
         <LanguageSelect class="language" />
         <ButtonBasketVue :number="total" />
-        <AvatarIcon :inicial="inicial" />
+        <AvatarIcon />
       </q-toolbar>
       <ProductsTabsVue class="float-center" />
     </q-header>
@@ -22,6 +26,7 @@
       </div>
       <div class="row justify-center q-py-md">
         <SearchProductVue
+          v-if="vSearch"
           class="col-4"
           :style="isMobile ? `width: 220px` : `width: 500px`"
         />
@@ -47,7 +52,6 @@ import ButtonBasketVue from "src/components/buttons/ButtonBasket.vue";
 import CarouselIndexVue from "src/components/CarouselIndex.vue";
 import SearchProductVue from "src/components/inputs/SearchProduct.vue";
 
-import { useAuthStore } from "stores/auth";
 import { storeToRefs } from "pinia";
 
 import { useOrdersStore } from "src/stores/orders";
@@ -66,16 +70,14 @@ export default defineComponent({
     CarouselIndexVue,
   },
   setup() {
-    const auth = useAuthStore();
-    const { inicial } = storeToRefs(auth);
     const order = useOrdersStore();
     const { total } = storeToRefs(order);
     const $q = useQuasar();
     return {
-      inicial,
       search: ref(null),
       total,
       isMobile: $q.platform.is.mobile,
+      vSearch: ref(true),
     };
   },
 });

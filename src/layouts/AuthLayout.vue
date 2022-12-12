@@ -3,7 +3,7 @@
     <!-- content -->
     <div>
       <q-img
-        src="src/assets/chef_hat.png"
+        src="src/assets/icons/chef_hat.png"
         style="height: 180px; max-width: 200px; cursor: pointer"
         @click="router.push({ path: `/` })"
       />

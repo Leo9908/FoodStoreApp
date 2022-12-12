@@ -15,6 +15,7 @@ export const useOrdersStore = defineStore("orders", {
     orderTable: [],
     addressOptions: [],
     finalOrder: {},
+    totalPrice: 0,
   }),
 
   getters: {
@@ -82,6 +83,7 @@ export const useOrdersStore = defineStore("orders", {
           price: price * value,
         });
       });
+      this.calcTotalPrice();
     },
     generateAddressOptions() {
       this.addressOptions = [];
@@ -94,8 +96,6 @@ export const useOrdersStore = defineStore("orders", {
     sendOrder(data) {
       this.prepareFinalOrder(data);
       const user = useAuthStore();
-      console.log(this.productList);
-      console.log(this.finalOrder);
       api.post(`/${user.me.id}/orders`, this.finalOrder).then(() => {
         this.clearOrder();
       });
@@ -115,7 +115,6 @@ export const useOrdersStore = defineStore("orders", {
       this.productList.forEach((val, key) => {
         convMap[key] = val;
       });
-      console.log(convMap);
       this.finalOrder = {
         addresses: addresses,
         products: convMap,
@@ -128,6 +127,12 @@ export const useOrdersStore = defineStore("orders", {
       this.orderTable = [];
       this.addressOptions = [];
       this.finalOrder = {};
+    },
+    calcTotalPrice() {
+      this.totalPrice = 0;
+      this.orderTable.forEach((value) => {
+        this.totalPrice += value.price;
+      });
     },
   },
 });

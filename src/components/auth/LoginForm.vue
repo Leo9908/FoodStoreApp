@@ -3,12 +3,12 @@
     <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
       <q-input
         v-model="nameuser"
-        label="Your user name *"
+        :label="$t(`login_card.fields.user`)"
         :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
       />
       <q-input
         v-model="password"
-        label="Your password *"
+        :label="$t(`login_card.fields.pass`)"
         :type="isPwd ? 'password' : 'text'"
         :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
       >

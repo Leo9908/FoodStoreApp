@@ -2,7 +2,9 @@
   <q-page class="index flex flex-center q-mb-md">
     <food-card-vue v-for="d in products" v-bind:key="d" :dish="d" />
     <q-card
-      v-if="dishes.length == 0 || (isSearching && searchedDishes.length == 0)"
+      v-if="
+        onSaleDishes.length == 0 || (isSearching && searchedDishes.length == 0)
+      "
       flat
       bordered
       class="q-ma-md bg-grey-2"
@@ -24,17 +26,17 @@ import FoodCardVue from "src/components/cards/FoodCard.vue";
 import { useProductsStore } from "stores/products";
 
 import { storeToRefs } from "pinia";
+import { useAuthStore } from "src/stores/auth";
 
 export default defineComponent({
   name: "IndexPage",
   components: {
     FoodCardVue,
   },
+
   created() {
     try {
-      if (this.dishes.length == 0) {
-        this.getProducts();
-      }
+      this.getOnSaleProducts();
     } catch (error) {
       console.log(error);
     }
@@ -44,11 +46,11 @@ export default defineComponent({
   },
   setup() {
     const product = useProductsStore();
-    const { dishes, searchedDishes, isSearching } = storeToRefs(product);
-    const { getProducts } = product;
+    const { onSaleDishes, searchedDishes, isSearching } = storeToRefs(product);
+    const { getOnSaleProducts } = product;
     return {
-      dishes,
-      getProducts,
+      onSaleDishes,
+      getOnSaleProducts,
       searchedDishes,
       isSearching,
     };
@@ -58,7 +60,7 @@ export default defineComponent({
       if (this.isSearching) {
         return this.searchedDishes;
       }
-      return this.dishes;
+      return this.onSaleDishes;
     },
   },
 });

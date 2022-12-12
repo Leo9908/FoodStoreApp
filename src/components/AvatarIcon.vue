@@ -27,14 +27,12 @@ export default defineComponent({
   components: {
     ProfileMenuVue,
   },
-  props: {
-    inicial: { type: String, required: false, default: "U" },
-  },
   setup() {
     const auth = useAuthStore();
-    const { isAutenticatedNow } = storeToRefs(auth);
+    const { isAutenticatedNow, inicial } = storeToRefs(auth);
     return {
       isAutenticatedNow,
+      inicial,
       authActions() {
         if (!isAutenticatedNow.value) {
           this.$router.push({ path: "/auth/login" });

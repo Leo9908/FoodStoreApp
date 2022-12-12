@@ -88,6 +88,8 @@ import { useOrdersStore } from "src/stores/orders";
 import { useProductsStore } from "src/stores/products";
 import { Notify } from "quasar";
 import { biHandThumbsUpFill } from "@quasar/extras/bootstrap-icons";
+import { storeToRefs } from "pinia";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: `foodCard`,
@@ -109,7 +111,8 @@ export default defineComponent({
     }
   },
   data() {
-    const stars = ref(this.dish.rating);
+    let value = this.dish.rating != undefined ? this.dish.rating : 3.5;
+    const stars = ref(value);
     return {
       icon: "shopping_cart",
       stars,
@@ -121,6 +124,8 @@ export default defineComponent({
     const products = useProductsStore();
     const { addProduct, deleteProduct, increment, decrement } = order;
     const { doRating } = products;
+    const { getProductType } = storeToRefs(products);
+    const { t } = useI18n();
     return {
       colorBtn: "secondary",
       isSelected: ref(false),
@@ -134,6 +139,9 @@ export default defineComponent({
       isSelectedNow: order.isSelected,
       numberProduct: order.numberProduct,
       doRating,
+
+      getProductType,
+      t,
     };
   },
   watch: {
@@ -155,24 +163,7 @@ export default defineComponent({
   },
   methods: {
     getType(num) {
-      switch (num) {
-        case 1:
-          return `${this.$t(`products.breakfast`)}`;
-        case 2:
-          return `${this.$t(`products.lunch`)}`;
-        case 3:
-          return `${this.$t(`products.dinner`)}`;
-        case 4:
-          return `${this.$t(`products.garnish`)}`;
-        case 5:
-          return `${this.$t(`products.fast_food`)}`;
-        case 6:
-          return `${this.$t(`products.canned_food`)}`;
-        case 7:
-          return `${this.$t(`products.side_dish`)}`;
-        default:
-          return `${this.$t(`products.breakfast`)}`;
-      }
+      return this.getProductType(num, this.t);
     },
     /**
      * This method allows you to add a product to the order

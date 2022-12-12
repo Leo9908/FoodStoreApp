@@ -13,6 +13,7 @@
       </q-toolbar>
 
       <q-tabs
+        v-if="isUser"
         v-model="tab"
         dense
         inline-label
@@ -47,12 +48,16 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 import { biArrowLeft } from "@quasar/extras/bootstrap-icons";
+import { useAuthStore } from "src/stores/auth";
+import { storeToRefs } from "pinia";
 
 export default {
   // name: 'LayoutName',
-
+  beforeMount() {},
   setup() {
     const router = useRouter();
+    const auth = useAuthStore();
+    const { isUser } = storeToRefs(auth);
     return {
       router,
       biArrowLeft,
@@ -60,6 +65,7 @@ export default {
       goBack() {
         router.push({ path: "/" });
       },
+      isUser,
     };
   },
 };

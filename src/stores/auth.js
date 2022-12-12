@@ -1,18 +1,21 @@
 import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
-import { SessionStorage } from "quasar";
+import { Notify, SessionStorage } from "quasar";
 
 import { useMapsStore } from "./maps";
 
 import { useProductsStore } from "./products";
 import { useProfileStore } from "./profile";
 
+import User from "./objects/User";
+
 export const useAuthStore = defineStore("auth", {
   state: () => ({
-    me: {},
+    me: new User(),
     token: "",
     isAutenticated: false,
     inicial: "U",
+    roles: [],
   }),
 
   getters: {
@@ -28,16 +31,34 @@ export const useAuthStore = defineStore("auth", {
     getUserId(state) {
       return state.me.id;
     },
+    isAdmin(state) {
+      return state.roles.includes("ROLE_ADMIN");
+    },
+    isUser(state) {
+      return state.roles.includes("ROLE_USER");
+    },
   },
 
   actions: {
-    async doLogin(payload) {
-      await api.post("/auth/login", payload).then((response) => {
-        const token = response.data.accessToken;
+    async doLogin(payload, t, router) {
+      try {
+        const token = await (
+          await api.post("/auth/login", payload)
+        ).data.accessToken;
         api.defaults.headers.common["Authorization"] = `Bearer${token}`;
-        this.setToken(token);
         this.getMe();
-      });
+        this.setToken(token);
+        Notify.create({
+          message: t("login_card.logOk"),
+          color: "info",
+        });
+        router.push({ path: "/" });
+      } catch (error) {
+        Notify.create({
+          message: t("login_card.noCorrect"),
+          color: "warning",
+        });
+      }
     },
     singOut() {
       api.defaults.headers.common["Authorization"] = "";
@@ -64,44 +85,49 @@ export const useAuthStore = defineStore("auth", {
     removeInicial() {
       this.inicial = "U";
     },
-    getMe() {
+    async getMe() {
       const maps = useMapsStore();
       const product = useProductsStore();
       const profile = useProfileStore();
-      api
-        .get("/auth/current-user")
-        .then((response) => {
-          this.setMe(response.data);
-          profile.setMe(this.me);
-          this.setInicial(response.data.name.substring(0, 1));
-          maps.getAllAddress();
-          product.getFavoritesProducts();
-        })
-        .catch((error) => {
-          console.log(error);
-          this.isAutenticated = false;
-        });
+      try {
+        this.me = await (await api.get("/auth/current-user")).data;
+        this.getRoles();
+        profile.setMe(this.me);
+        this.setInicial(this.me.name.substring(0, 1));
+        maps.getAllAddress();
+        product.getFavoritesProducts();
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    getRoles() {
+      this.me.roles.forEach((role) => {
+        this.roles.push(role.name);
+      });
     },
     removeMe() {
       const profile = useProfileStore();
-      this.me = {};
-      profile.clearMe();
+      profile.$reset();
+      this.me = new User();
+      this.roles = [];
     },
     init() {
       const token = SessionStorage.getItem("token");
       if (token) {
         const tokenCopy = token.substring(1, token.length - 1);
         api.defaults.headers.common["Authorization"] = `Bearer${tokenCopy}`;
-        this.setToken(JSON.parse(token));
         this.getMe();
+        this.setToken(JSON.parse(token));
       } else {
         this.removeToken();
       }
     },
     async sendEmailChangePassword(email) {
-      await api
-        .post("/auth/email/send-email", { emailTo: email })
-        .then((response) => {});
+      try {
+        await api.post("/auth/email/send-email", { emailTo: email });
+      } catch (error) {
+        console.log(error);
+      }
     },
     async changePassword(password, confirmPassword, token) {
       await api.post("/auth/email/change-password", {

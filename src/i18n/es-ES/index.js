@@ -15,11 +15,19 @@ export default {
                  nuestra comida, es nuestro
                  proposito en la vida.`,
   buttons_labels: {
+    reset: "Restaurar",
     confirm: "Confirmar",
     cancel: "Cancelar",
     accept: "Aceptar",
   },
   login_card: {
+    fields: {
+      user: "Nombre de usuario o correo",
+      pass: "Contraseña",
+      name: "Nombre ",
+      last_name: "Apellidos",
+      email: "Correo electrónico",
+    },
     login: "Iniciar sesión",
     logout: "Cerrar sesión",
     logoutInfo: "¿Usted desea cerrar la sesión?",
@@ -46,6 +54,7 @@ export default {
     noEquals: "Las contraseñas deben coincidir",
   },
   products: {
+    name: "Producto",
     breakfast: "Desayuno",
     lunch: "Almuerzo",
     dinner: "Cena",
@@ -151,10 +160,18 @@ export default {
     alias_default: "Mi casa",
   },
   actions: {
-    delete: "Eliminar",
+    delete: "Eliminar {0}",
+    add: "Añadir {0}",
   },
   responses: {
-    deleted: "Elimindo",
+    deleted: "{0} eliminado",
+    edited: "{0} editado",
+    add: "{0} añadido",
+    errors: {
+      noDeleted: "Error al eliminar {0}",
+      noEdited: "Error al editar {0}",
+      noAdd: "Error al añadir {0}",
+    },
   },
   orders: {
     table: {
@@ -170,5 +187,44 @@ export default {
       phone: "Contacto",
     },
     send: "Pedido enviado",
+    totalPrice: "Total",
+  },
+  admin: {
+    title: "Gustó Administración",
+    drawer: {
+      item1: "Gestión de productos",
+      item2: "Reportes de ventas",
+      item3: "Tienda Gustó",
+    },
+    products: {
+      table: {
+        title: "Productos",
+        columns: {
+          c1: "Nombre",
+          c2: "Precio",
+          c3: "Tipo",
+          c4: "¿En venta?",
+          c5: "Calificación",
+          c6: "Acciones",
+          onSale: "Sí",
+          noOnsale: "No",
+        },
+        actions: {
+          a1: "Editar",
+          a2: "Eliminar",
+          confirm: "Confirmar",
+          message: "¿Desea eliminar el producto?",
+          save: "¿Desea salir sin guardar el producto?",
+        },
+        deleted: "",
+        edited: "Producto editado",
+      },
+      edit: {
+        title: "Edición de productos",
+      },
+      add: {
+        title: "Nuevo producto",
+      },
+    },
   },
 };

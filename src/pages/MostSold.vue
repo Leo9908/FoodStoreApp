@@ -33,11 +33,9 @@ export default defineComponent({
   components: {
     FoodCardVue,
   },
-  beforeCreate() {
+  created() {
     try {
-      if (this.mostSoldDishes.length == 0) {
-        this.getMostSoldProducts();
-      }
+      this.getMostSoldProducts();
     } catch (error) {
       console.log(error);
     }

@@ -33,6 +33,7 @@
           >
           </q-btn>
           <q-btn
+            v-if="isUser"
             size="10px"
             round
             outline
@@ -41,11 +42,20 @@
             @click="editAddresses"
           ></q-btn>
           <q-btn
+            v-if="isAdmin"
             size="10px"
             round
             outline
             style="color: rgba(128, 128, 128, 0.5)"
-            :icon="biShieldLock"
+            icon="manage_accounts"
+            @click="goToManagement"
+          ></q-btn>
+          <q-btn
+            size="10px"
+            round
+            outline
+            style="color: rgba(128, 128, 128, 0.5)"
+            icon="shield"
           ></q-btn>
         </div>
       </q-card-section>
@@ -119,6 +129,7 @@ export default defineComponent({
     const auth = useAuthStore();
     const { getUser } = storeToRefs(profile);
     const { singOut } = auth;
+    const { isUser, isAdmin } = storeToRefs(auth);
     const { t } = useI18n();
     return {
       router,
@@ -129,6 +140,8 @@ export default defineComponent({
       biBoxArrowDownLeft,
       user: getUser,
       singOut,
+      isUser,
+      isAdmin,
       confirm: ref(false),
       logOut() {
         singOut();
@@ -137,12 +150,16 @@ export default defineComponent({
           message: t("login_card.logoutMessage"),
           icon: "",
         });
+        router.push({ path: "/" });
       },
       editProfile() {
         router.push({ path: "/profile/user-info" });
       },
       editAddresses() {
         router.push({ path: "/profile/addresses" });
+      },
+      goToManagement() {
+        router.push({ name: "adminProducts" });
       },
     };
   },
