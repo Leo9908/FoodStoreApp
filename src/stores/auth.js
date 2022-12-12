@@ -40,7 +40,7 @@ export const useAuthStore = defineStore("auth", {
   },
 
   actions: {
-    async doLogin(payload, t, router) {
+    async doLogin(payload, router) {
       try {
         const token = await (
           await api.post("/auth/login", payload)
@@ -49,13 +49,13 @@ export const useAuthStore = defineStore("auth", {
         this.getMe();
         this.setToken(token);
         Notify.create({
-          message: t("login_card.logOk"),
+          message: "Usted se ha autenticado correctamente",
           color: "info",
         });
         router.push({ path: "/" });
       } catch (error) {
         Notify.create({
-          message: t("login_card.noCorrect"),
+          message: "Nombre de usuario o contraseña incorrectos",
           color: "warning",
         });
       }

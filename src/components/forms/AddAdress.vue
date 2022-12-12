@@ -7,13 +7,13 @@
       <q-input
         bottom-slots
         v-model="address.alias"
-        :label="$t(`add_address.alias`)"
+        label="Alias"
         dense
         rounded
         outlined
         style="width: 250px"
         type="text"
-        :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+        :rules="[(val) => (val && val.length > 0) || `Por favor escriba algo`]"
       >
       </q-input>
       <q-input
@@ -26,7 +26,7 @@
         style="width: 250px"
         type="textarea"
         autogrow
-        :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+        :rules="[(val) => (val && val.length > 0) || `Por favor escriba algo`]"
       >
         <template v-slot:after>
           <q-btn round dense flat :icon="biGeoFill" @click="locatorPressed" />
@@ -41,7 +41,7 @@
         outlined
         style="width: 250px"
         type="text"
-        :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+        :rules="[(val) => (val && val.length > 0) || `Por favor escriba algo`]"
       >
       </q-input>
       <div>

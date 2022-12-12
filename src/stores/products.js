@@ -30,36 +30,36 @@ export const useProductsStore = defineStore("products", {
         state.onSaleDishes.find((product) => product.id == productId).rating;
     },
     getProductType(state) {
-      return (type, $t) => {
+      return (type) => {
         switch (type) {
           case 1:
-            return $t(`products.breakfast`);
+            return "Desayuno";
           case 2:
-            return $t(`products.lunch`);
+            return "Almuerzo";
           case 3:
-            return $t(`products.dinner`);
+            return "Cena";
           case 4:
-            return $t(`products.garnish`);
+            return "Ensalada";
           case 5:
-            return $t(`products.fast_food`);
+            return "Comida rápida";
           case 6:
-            return $t(`products.canned_food`);
+            return "Comida enlatada";
           case 7:
-            return $t(`products.side_dish`);
+            return "Guarnición";
           default:
-            return $t(`products.breakfast`);
+            return "Desayuno";
         }
       };
     },
     getAllTypes(state) {
-      return ($t) => [
-        { label: $t(`products.breakfast`), value: 1 },
-        { label: $t(`products.lunch`), value: 2 },
-        { label: $t(`products.dinner`), value: 3 },
-        { label: $t(`products.garnish`), value: 4 },
-        { label: $t(`products.fast_food`), value: 5 },
-        { label: $t(`products.canned_food`), value: 6 },
-        { label: $t(`products.side_dish`), value: 7 },
+      return () => [
+        { label: "Desayuno", value: 1 },
+        { label: "Almuerzo", value: 2 },
+        { label: "Cena", value: 3 },
+        { label: "Ensalada", value: 4 },
+        { label: "Comida rápida", value: 5 },
+        { label: "Comida enlatada", value: 6 },
+        { label: "Guarnición", value: 7 },
       ];
     },
     getProductById(state) {
@@ -127,28 +127,28 @@ export const useProductsStore = defineStore("products", {
           console.log(error);
         });
     },
-    async setProduct(product, t, router) {
+    async setProduct(product, router) {
       if (product.id == null) {
         try {
           const newProduct = await (await api.post("/products", product)).data;
           this.products.push(newProduct);
           Notify.create({
             color: "info",
-            message: t("responses.add", [t("products.name")]),
+            message: "Producto añadido",
           });
           router.back();
         } catch (error) {
           console.log(error);
           Notify.create({
             color: "warning",
-            message: t("responses.errors.noAdd", [t("products.name")]),
+            message: "Error al añadir producto",
           });
         }
       } else {
-        this.updateProduct(product, t, router);
+        this.updateProduct(product, router);
       }
     },
-    async updateProduct(edited, t, router) {
+    async updateProduct(edited, router) {
       if (edited.id != undefined) {
         try {
           const editedProduct = await (
@@ -158,18 +158,18 @@ export const useProductsStore = defineStore("products", {
           localEdited = editedProduct;
           Notify.create({
             color: "info",
-            message: t("responses.edited", [t("products.name")]),
+            message: "Producto editado",
           });
           router.back();
         } catch (error) {
           console.log(error);
           Notify.create({
             color: "warning",
-            message: t("responses.errors.noEdited", [t("products.name")]),
+            message: "Error al editar producto",
           });
         }
       } else {
-        this.setProduct(edited, t, router);
+        this.setProduct(edited, router);
       }
     },
     async delete(id, t) {

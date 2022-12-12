@@ -7,7 +7,7 @@
       outlined
       type="search"
       v-model="search"
-      :placeholder="$t(`index.search`)"
+      placeholder="Buscar"
       clearable
       @keyup.enter="searchProducts"
     >

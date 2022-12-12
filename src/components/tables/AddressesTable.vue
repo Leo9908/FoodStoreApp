@@ -6,13 +6,13 @@
         flat
         bordered
         icon="add"
-        :label="$t(`addresses.actions.add`)"
+        label="Agregar dirección"
         @click="$emit(`add`)"
       />
     </div>
     <q-table
       class="no-shadow q-px-sm q-mb-xl"
-      :title="$t(`addresses.table.title`)"
+      title="Sus direcciones"
       :rows="rows"
       :columns="columns"
       row-key="alias"
@@ -34,18 +34,16 @@
 
 <script>
 import { defineComponent, ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   data() {
-    const { t } = useI18n();
     return {
       columns: [
         {
           name: "alias",
           field: "alias",
           required: true,
-          label: t("addresses.table.columns.alias"),
+          label: "Alias",
           align: "left",
           format: (val) => `${val}`,
           sortable: true,
@@ -53,12 +51,12 @@ export default defineComponent({
         {
           name: "formatted",
           align: "left",
-          label: t("addresses.table.columns.address"),
+          label: "Dirección",
           field: "formatted",
         },
         {
           name: "apto",
-          label: t("addresses.table.columns.apto"),
+          label: "Apartamento",
           field: "apto",
           style: "width: 150px",
           align: "left",

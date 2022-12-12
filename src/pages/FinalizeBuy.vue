@@ -2,9 +2,7 @@
   <q-page padding>
     <section class="fit row wrap justify-start items-start content-start">
       <section class="col-grow" align="right">
-        <div class="q-mx-md">
-          {{ $t("orders.totalPrice") }} : {{ totalPrice }}
-        </div>
+        <div class="q-mx-md">Total: {{ totalPrice }}</div>
         <order-table-vue />
       </section>
       <section class="col-grow">

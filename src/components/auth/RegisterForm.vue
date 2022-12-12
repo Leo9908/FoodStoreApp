@@ -4,27 +4,27 @@
       <q-input
         v-model="name"
         :label="$t(`login_card.fields.name`)"
-        :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+        :rules="[(val) => (val && val.length > 0) || `Por favor escriba algo`]"
         dense
       />
       <q-input
         v-model="last_name"
         :label="$t(`login_card.fields.last_name`)"
-        :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+        :rules="[(val) => (val && val.length > 0) || `Por favor escriba algo`]"
         dense
       />
       <q-input
         v-model="email"
         type="email"
         :label="$t(`login_card.fields.email`)"
-        :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+        :rules="[(val) => (val && val.length > 0) || `Por favor escriba algo`]"
         dense
       />
       <q-input
         v-model="password"
         :label="$t(`login_card.fields.pass`)"
         :type="isPwd ? 'password' : 'text'"
-        :rules="[(val) => val.length >= 8 || $t(`errors.digites`, [8])]"
+        :rules="[(val) => val.length >= 8 || `Debe contener más de 8 dígitos`]"
         dense
       >
         <template v-slot:append>

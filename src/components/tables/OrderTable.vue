@@ -1,7 +1,7 @@
 <template>
   <div class="q-pa-md">
     <q-table
-      :title="$t(`orders.table.label`)"
+      title="Su pedido"
       :rows="orderTable"
       :columns="columns"
       row-key="name"
@@ -17,8 +17,8 @@
             <q-popup-edit
               v-model.number="props.row.amount"
               buttons
-              label-set="Save"
-              label-cancel="Close"
+              label-set="Guardar"
+              label-cancel="Cerrar"
               :validate="amountRangeValidation"
               @hide="amountRangeValidation"
               @save="
@@ -30,7 +30,7 @@
               <q-input
                 type="number"
                 v-model.number="scope.value"
-                :hint="$t(`hints.range`, [1, 20])"
+                hint="Introduzca un número entre 1 y 20"
                 :error="errorAmount"
                 :error-message="errorMessageAmount"
                 dense
@@ -64,7 +64,7 @@ export default defineComponent({
         {
           name: "name",
           required: true,
-          label: this.$t("orders.table.columns.product"),
+          label: "Producto",
           align: "left",
           field: (row) => row.name,
           format: (val) => `${val}`,
@@ -73,13 +73,13 @@ export default defineComponent({
         {
           name: "amount",
           align: "center",
-          label: this.$t("orders.table.columns.amount"),
+          label: "Cantidad",
           field: "amount",
           sortable: true,
         },
         {
           name: "price",
-          label: this.$t("orders.table.columns.price"),
+          label: "Precio",
           field: "price",
           sortable: true,
           style: "width: 10px",
@@ -109,7 +109,7 @@ export default defineComponent({
     amountRangeValidation(val) {
       if (val < 1 || val > 20) {
         this.errorAmount = true;
-        this.errorMessageAmount = this.$t("errors.range", [0, 20]);
+        this.errorMessageAmount = "¡El valor debe estar entre 1 y 20!";
         return false;
       }
       this.errorAmount = false;

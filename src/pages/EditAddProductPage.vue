@@ -4,11 +4,7 @@
     <div :class="[isDesktop ? `q-ma-xl` : `q-ma-sm`, `q-pb-md`]">
       <q-card bordered flat>
         <div class="text-h5 q-ma-sm" style="margin-left: 20px">
-          {{
-            isEditing
-              ? $t("admin.products.edit.title")
-              : $t("admin.products.add.title")
-          }}
+          {{ isEditing ? "Edición de productos" : "Nuevo producto" }}
         </div>
         <form-vue-vue
           class="q-gutter-md"
@@ -26,7 +22,7 @@
               label="Tipo"
             />
             <div>
-              <q-toggle v-model="onSales" />Desesa poner el producto en venta
+              <q-toggle v-model="onSales" />¿Desesa poner el producto en venta?
             </div>
           </template>
         </form-vue-vue>
@@ -45,7 +41,6 @@ import { ref } from "vue";
 
 import { useProductsStore } from "src/stores/products";
 
-import { useI18n } from "vue-i18n";
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 
@@ -61,10 +56,10 @@ export default {
   beforeCreate() {
     if (this.exitProduct(this.id)) {
       this.product = Object.assign({}, this.getProductById(this.id));
-      this.type = this.getProductType(this.product.type, this.t);
+      this.type = this.getProductType(this.product.type);
       this.onSales = this.product.onSale;
     }
-    this.options = this.getAllTypes(this.t);
+    this.options = this.getAllTypes();
     this.$bus.on("updated", (data) => {
       this.product.name = data[0].value;
       this.product.precio = data[1].value;
@@ -75,8 +70,8 @@ export default {
     if (this.isSave == false) {
       this.$q
         .dialog({
-          title: this.t("admin.products.table.actions.confirm"),
-          message: this.t("admin.products.table.actions.save"),
+          title: "Confirmar",
+          message: "¿Desea salir sin guardar el producto?",
           cancel: true,
           persistent: true,
         })
@@ -95,26 +90,27 @@ export default {
       inputs: [
         {
           index: 0,
-          label: "Name",
+          label: "Nombre",
           name: "name",
           value: this.product.name ? this.product.name : null,
-          rules: [(val) => !!val || "Field is required"],
+          rules: [(val) => !!val || "Campo requerido"],
         },
         {
           index: 1,
-          label: "Price",
+          label: "Precio",
           name: "price",
           value: this.product.precio ? this.product.precio : null,
-          rules: [(val) => !!val || "Field is required"],
+          rules: [(val) => !!val || "Campo requerido"],
         },
         {
           index: 2,
-          label: "Description",
+          label: "Descripción",
           name: "description",
           value: this.product.description ? this.product.description : null,
           rules: [
-            (val) => !!val || "Field is required",
-            (val) => val.length <= 110 || "Please use maximum 110 characters",
+            (val) => !!val || "Campo requerido",
+            (val) =>
+              val.length <= 110 || "Por favor, use un máximo de 110 caracteres",
           ],
         },
       ],
@@ -136,7 +132,7 @@ export default {
     const product = ref({});
     const type = ref(null);
     const options = ref([]);
-    const { t } = useI18n();
+
     const $q = useQuasar();
     const isEditing = props.id != undefined ? true : false;
     const isSave = ref(false);
@@ -150,7 +146,7 @@ export default {
       product,
       type,
       options,
-      t,
+
       isMobile: $q.platform.is.mobile,
       isDesktop: $q.platform.is.desktop,
       onSales: ref(false),
@@ -172,7 +168,7 @@ export default {
           //para probar nada mas
           imgUrl: "src/assets/icons/chef_hat.png",
         };
-        this.updateProduct(edited, this.t, this.router);
+        this.updateProduct(edited, this.router);
       }
     },
   },

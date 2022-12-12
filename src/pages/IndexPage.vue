@@ -11,8 +11,10 @@
     >
       <q-card-section>{{
         !isSearching
-          ? $t("products.errors.noProducts")
-          : $t("products.errors.noMatches")
+          ? `Lo sentimos. No hay productos
+             en venta en estos momentos,
+             por favor regrese más tarde. Gracias`
+          : `No hay coincidencias`
       }}</q-card-section>
     </q-card>
   </q-page>
@@ -26,7 +28,6 @@ import FoodCardVue from "src/components/cards/FoodCard.vue";
 import { useProductsStore } from "stores/products";
 
 import { storeToRefs } from "pinia";
-import { useAuthStore } from "src/stores/auth";
 
 export default defineComponent({
   name: "IndexPage",

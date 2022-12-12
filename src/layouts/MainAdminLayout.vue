@@ -8,11 +8,8 @@
           <q-avatar>
             <img src="src/assets/icons/chef_hat.png" />
           </q-avatar>
-          {{ $t("admin.title") }}
+          Gustó Administración
         </q-toolbar-title>
-        <div>
-          <language-select-vue />
-        </div>
         <div>
           <avatar-icon-vue />
         </div>
@@ -31,9 +28,7 @@
               <q-icon name="restaurant_menu" />
             </q-item-section>
 
-            <q-item-section>
-              {{ $t("admin.drawer.item1") }}
-            </q-item-section>
+            <q-item-section> Gestión de productos </q-item-section>
           </q-item>
 
           <q-item clickable v-ripple @click="router.push({ name: `reports` })">
@@ -41,9 +36,7 @@
               <q-icon name="assignment" />
             </q-item-section>
 
-            <q-item-section>
-              {{ $t("admin.drawer.item2") }}
-            </q-item-section>
+            <q-item-section> Reportes de ventas </q-item-section>
           </q-item>
 
           <q-item clickable v-ripple @click="router.push({ name: `home` })">
@@ -51,7 +44,7 @@
               <q-icon name="store" />
             </q-item-section>
 
-            <q-item-section> {{ $t("admin.drawer.item3") }} </q-item-section>
+            <q-item-section> Tienda Gustó </q-item-section>
           </q-item>
 
           <q-item clickable v-ripple>
@@ -75,14 +68,12 @@
 import { ref } from "vue";
 
 import AvatarIconVue from "src/components/AvatarIcon.vue";
-import LanguageSelectVue from "src/components/selects/LanguageSelect.vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "src/stores/auth";
 
 export default {
   components: {
     AvatarIconVue,
-    LanguageSelectVue,
   },
   beforeRouteEnter(to, from) {
     const auth = useAuthStore();

@@ -7,9 +7,7 @@
       <q-toolbar class="q-mt-sm">
         <q-btn flat round dense :icon="biArrowLeft" @click="goBack" />
 
-        <q-toolbar-title>
-          {{ $t("edit_profile.title") }}
-        </q-toolbar-title>
+        <q-toolbar-title> Sobre mí </q-toolbar-title>
       </q-toolbar>
 
       <q-tabs
@@ -25,13 +23,13 @@
           name="info"
           icon="assignment"
           to="/profile/user-info"
-          :label="$t(`edit_profile.tabs.basicInfo`)"
+          label="Información básica"
         />
         <q-route-tab
           name="addresses"
           icon="map"
           to="/profile/addresses"
-          :label="$t(`edit_profile.tabs.addresses`)"
+          label="Direcciones de entrega"
         />
       </q-tabs>
     </q-header>

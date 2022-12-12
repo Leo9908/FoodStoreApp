@@ -3,7 +3,7 @@
     <q-markup-table class="no-shadow">
       <tbody>
         <tr>
-          <td class="text-left">{{ $t("edit_profile.name") }}</td>
+          <td class="text-left">Nombre</td>
           <td class="text-right">
             {{ me.name }}
             <q-popup-edit v-model="me.name" auto-save v-slot="scope">
@@ -12,14 +12,14 @@
                 dense
                 autofocus
                 :rules="[
-                  (val) => (val && val.length > 0) || $t(`errors.emptyField`),
+                  (val) => (val && val.length > 0) || `Por favor escriba algo`,
                 ]"
               />
             </q-popup-edit>
           </td>
         </tr>
         <tr>
-          <td class="text-left">{{ $t("edit_profile.last_name") }}</td>
+          <td class="text-left">Apellidos</td>
           <td class="text-right">
             {{ me.last_name }}
             <q-popup-edit v-model="me.last_name" auto-save v-slot="scope">
@@ -28,14 +28,14 @@
                 dense
                 autofocus
                 :rules="[
-                  (val) => (val && val.length > 0) || $t(`errors.emptyField`),
+                  (val) => (val && val.length > 0) || `Por favor escriba algo`,
                 ]"
               />
             </q-popup-edit>
           </td>
         </tr>
         <tr>
-          <td class="text-left">{{ $t("edit_profile.email") }}</td>
+          <td class="text-left">Correo electrónico</td>
           <td class="text-right">
             {{ `${me.email.substring(0, 22)}...` }}
             <q-popup-edit
@@ -57,7 +57,7 @@
           </td>
         </tr>
         <tr>
-          <td class="text-left">{{ $t("edit_profile.phone") }}</td>
+          <td class="text-left">Teléfono</td>
           <td class="text-right">
             {{ me.phone }}
             <q-popup-edit
@@ -87,7 +87,7 @@
         style="width: 100%"
         color="primary"
         :icon="biGeoAltFill"
-        :label="$t(`edit_profile.addressList.name`)"
+        label="Direcciones"
         @click="[this.$bus.emit(`add-address`), routerDialog.count++]"
       />
     </div>
@@ -141,7 +141,7 @@ export default defineComponent({
     emailValidation(val) {
       if (!val.includes("@")) {
         this.errorEmail = true;
-        this.errorMessageEmail = this.$t("errors.letters", ["@"]);
+        this.errorMessageEmail = "Debe contener @";
         return false;
       }
       this.errorEmail = false;
@@ -151,7 +151,7 @@ export default defineComponent({
     phoneValidation(val) {
       if (val.toString().length < 8) {
         this.errorPhone = true;
-        this.errorMessagePhone = this.$t("errors.digites", [8]);
+        this.errorMessagePhone = "Debe contener 8 dígitos";
         return false;
       }
       this.errorPhone = false;

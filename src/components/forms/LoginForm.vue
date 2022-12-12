@@ -2,24 +2,22 @@
   <div>
     <div style="height: 400; max-width: 300px">
       <q-card class="q-pa-md" flat bordered>
-        <q-card-section class="text-h5">{{
-          $t("login_card.login")
-        }}</q-card-section>
+        <q-card-section class="text-h5">Iniciar sesión</q-card-section>
         <q-card-section>
           <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
             <q-input
               v-model="nameuser"
-              :label="$t(`login_card.fields.user`)"
+              label="Nombre de usuario o correo"
               :rules="[
-                (val) => (val && val.length > 0) || $t(`errors.emptyField`),
+                (val) => (val && val.length > 0) || `Por favor escriba algo`,
               ]"
             />
             <q-input
               v-model="password"
-              :label="$t(`login_card.fields.pass`)"
+              label="Contraseña"
               :type="isPwd ? 'password' : 'text'"
               :rules="[
-                (val) => (val && val.length > 0) || $t(`errors.emptyField`),
+                (val) => (val && val.length > 0) || `Por favor escriba algo`,
               ]"
             >
               <template v-slot:append>
@@ -30,13 +28,9 @@
                 /> </template
             ></q-input>
             <div class="q-gutter-sm">
+              <q-btn label="Iniciar sesión" type="submit" color="primary" />
               <q-btn
-                :label="$t(`login_card.login`)"
-                type="submit"
-                color="primary"
-              />
-              <q-btn
-                :label="$t(`buttons_labels.reset`)"
+                label="Reiniciar"
                 type="reset"
                 color="primary"
                 flat
@@ -46,9 +40,9 @@
           </q-form>
         </q-card-section>
         <q-card-section>
-          <router-link class="change_pass" to="/auth/change-password">{{
-            $t("login_card.forgotten")
-          }}</router-link>
+          <router-link class="change_pass" to="/auth/change-password">
+            ¿Olvidaste tu contraseña?
+          </router-link>
         </q-card-section>
       </q-card>
       <div>
@@ -57,7 +51,7 @@
           <q-btn
             color="grey"
             unelevated
-            :label="$t(`login_card.createAccount`)"
+            label="Crear tu cuenta en Gustó"
             no-caps
             @click="router.push(`/auth/register`)"
           />
@@ -69,7 +63,7 @@
 <script>
 import { useAuthStore } from "src/stores/auth";
 import { defineComponent, ref } from "vue";
-import { useI18n } from "vue-i18n";
+
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -79,7 +73,7 @@ export default defineComponent({
     const { doLogin } = auth;
     const nameuser = ref(null);
     const password = ref(null);
-    const { t } = useI18n();
+
     return {
       router,
       nameuser,
@@ -91,7 +85,7 @@ export default defineComponent({
             usernameOrEmail: nameuser.value,
             password: password.value,
           },
-          t,
+
           router
         );
       },

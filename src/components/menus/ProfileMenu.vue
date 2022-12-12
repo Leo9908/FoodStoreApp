@@ -66,8 +66,9 @@
             unelevated
             outline
             @click="confirm = true"
-            >{{ $t("login_card.logout") }}</q-btn
           >
+            Cerrar sesión
+          </q-btn>
           <q-dialog class="q-py-xl" v-model="confirm">
             <q-card style="width: 300px">
               <q-card-section class="row items-center">
@@ -76,19 +77,14 @@
                   color="primary"
                   text-color="white"
                 />
-                <span class="q-ml-sm">{{ $t("login_card.logoutInfo") }}</span>
+                <span class="q-ml-sm">¿Usted desea cerrar la sesión?</span>
               </q-card-section>
 
               <q-card-actions align="right">
+                <q-btn flat label="Cancelar" color="primary" v-close-popup />
                 <q-btn
                   flat
-                  :label="$t(`buttons_labels.cancel`)"
-                  color="primary"
-                  v-close-popup
-                />
-                <q-btn
-                  flat
-                  :label="$t(`buttons_labels.confirm`)"
+                  label="Confirmar"
                   color="primary"
                   v-close-popup
                   @click="logOut"
@@ -115,7 +111,7 @@ import { useProfileStore } from "src/stores/profile";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "src/stores/auth";
 import { Notify } from "quasar";
-import { useI18n } from "vue-i18n";
+
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -130,7 +126,7 @@ export default defineComponent({
     const { getUser } = storeToRefs(profile);
     const { singOut } = auth;
     const { isUser, isAdmin } = storeToRefs(auth);
-    const { t } = useI18n();
+
     return {
       router,
       props,
@@ -147,7 +143,7 @@ export default defineComponent({
         singOut();
         Notify.create({
           color: "info",
-          message: t("login_card.logoutMessage"),
+          message: "La sesión se ha cerrado",
           icon: "",
         });
         router.push({ path: "/" });

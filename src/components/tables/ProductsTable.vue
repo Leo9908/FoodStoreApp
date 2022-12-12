@@ -5,7 +5,7 @@
       style="height: 400px"
       flat
       bordered
-      :title="$t(`admin.products.table.title`)"
+      title="Productos"
       :rows="rows"
       :columns="columns"
       row-key="index"
@@ -22,7 +22,7 @@
             dense
             debounce="300"
             v-model="filter"
-            placeholder="Search"
+            placeholder="Buscar"
           >
             <template v-slot:append>
               <q-icon name="search" />
@@ -31,7 +31,7 @@
           <q-btn
             outline
             class=".col-md md-2"
-            :label="$t(`actions.add`, [$t(`products.name`)])"
+            label="Añadir producto"
             icon="add"
             @click="add"
           ></q-btn>
@@ -40,7 +40,7 @@
       <template v-slot:body-cell-action="scope">
         <q-td :props="scope" class="q-gutter-xs">
           <q-btn
-            :label="$t(`admin.products.table.actions.a1`)"
+            label="Editar"
             icon="edit"
             outline
             key="xs-1"
@@ -48,7 +48,7 @@
             @click="edit(scope.row.id)"
           />
           <q-btn
-            :label="$t(`admin.products.table.actions.a2`)"
+            label="Eliminar"
             icon="delete"
             align="between"
             color="secondary"
@@ -67,7 +67,6 @@
 import { storeToRefs } from "pinia";
 import { useProductsStore } from "src/stores/products";
 import { ref, toRef } from "vue";
-import { useI18n } from "vue-i18n";
 
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
@@ -82,11 +81,11 @@ export default {
     const { getProductType } = storeToRefs(product);
     const products = toRef(props, "products");
     const $q = useQuasar();
-    const { t } = useI18n();
+
     function confirm(id) {
       $q.dialog({
-        title: t("admin.products.table.actions.confirm"),
-        message: t("admin.products.table.actions.message"),
+        title: "Confirmar",
+        message: "¿Desea eliminar el producto?",
         cancel: true,
         persistent: true,
       }).onOk(() => {
@@ -103,39 +102,38 @@ export default {
         {
           name: "name",
           required: true,
-          label: t(`admin.products.table.columns.c1`),
+          label: "Nombre",
           align: "left",
           field: (row) => row.name,
           format: (val) => `${val}`,
           sortable: true,
         },
         {
-          name: "calories",
+          name: "precio",
           align: "center",
-          label: t(`admin.products.table.columns.c2`),
+          label: "Precio",
           field: "precio",
           sortable: true,
         },
         {
-          name: "fat",
-          label: t(`admin.products.table.columns.c3`),
-          field: (row) => getProductType.value(row.type, t),
+          name: "type",
+          label: "Tipo",
+          field: (row) => getProductType.value(row.type),
           sortable: true,
         },
         {
           name: "onSale",
-          label: t(`admin.products.table.columns.c4`),
-          field: (row) =>
-            row.onSale ? t("admin.products.table.columns.onSale") : `No`,
+          label: "¿En venta?",
+          field: (row) => (row.onSale ? "Sí" : "No"),
         },
         {
           name: "rating",
-          label: t(`admin.products.table.columns.c5`),
+          label: "Calificación",
           field: (row) => Math.round(row.rating),
         },
         {
           name: "action",
-          label: t(`admin.products.table.columns.c6`),
+          label: "Acciones",
           field: "action",
           align: "right",
         },
@@ -148,7 +146,6 @@ export default {
       },
       rows: products,
       confirm,
-      t,
     };
   },
 };

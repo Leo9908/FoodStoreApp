@@ -11,7 +11,6 @@
             />
           </div>
         </q-toolbar-title>
-        <LanguageSelect class="language" />
         <ButtonBasketVue :number="total" />
         <AvatarIcon />
       </q-toolbar>
@@ -42,9 +41,7 @@
 <script>
 import { defineComponent, ref } from "vue";
 
-import LanguageSelect from "components/selects/LanguageSelect.vue";
 import AvatarIcon from "components/AvatarIcon.vue";
-
 import AuthDialogVue from "src/components/auth/AuthDialog.vue";
 import ProductsTabsVue from "src/components/tabs/ProductsTabs.vue";
 import FooterIndexVue from "src/components/loyouts/FooterIndex.vue";
@@ -61,7 +58,6 @@ export default defineComponent({
   name: "MainLayout",
   components: {
     AuthDialogVue,
-    LanguageSelect,
     AvatarIcon,
     ProductsTabsVue,
     FooterIndexVue,

@@ -12,8 +12,10 @@
     >
       <q-card-section>{{
         !isSearching
-          ? $t("products.errors.noProducts")
-          : $t("products.errors.noMatches")
+          ? `Lo sentimos. No hay productos
+             en venta en estos momentos,
+             por favor regrese más tarde. Gracias`
+          : `No hay coincidencias`
       }}</q-card-section>
     </q-card>
   </q-page>

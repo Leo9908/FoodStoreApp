@@ -89,7 +89,6 @@ import { useProductsStore } from "src/stores/products";
 import { Notify } from "quasar";
 import { biHandThumbsUpFill } from "@quasar/extras/bootstrap-icons";
 import { storeToRefs } from "pinia";
-import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   name: `foodCard`,
@@ -125,7 +124,7 @@ export default defineComponent({
     const { addProduct, deleteProduct, increment, decrement } = order;
     const { doRating } = products;
     const { getProductType } = storeToRefs(products);
-    const { t } = useI18n();
+
     return {
       colorBtn: "secondary",
       isSelected: ref(false),
@@ -141,7 +140,6 @@ export default defineComponent({
       doRating,
 
       getProductType,
-      t,
     };
   },
   watch: {
@@ -149,7 +147,7 @@ export default defineComponent({
       try {
         this.doRating(this.dish.id, newVal);
         Notify.create({
-          message: this.$t("products.ratings.thanks"),
+          message: "Gracias por su calificación",
           color: "info",
           icon: biHandThumbsUpFill,
         });
@@ -163,7 +161,7 @@ export default defineComponent({
   },
   methods: {
     getType(num) {
-      return this.getProductType(num, this.t);
+      return this.getProductType(num);
     },
     /**
      * This method allows you to add a product to the order

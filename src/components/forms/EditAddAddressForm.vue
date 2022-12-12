@@ -8,16 +8,20 @@
       >
         <q-input
           v-model="editAddrress.alias"
-          :label="$t(`addresses.table.columns.alias`)"
+          label="Alias"
           lazy-rules
-          :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+          :rules="[
+            (val) => (val && val.length > 0) || `Por favor escriba algo`,
+          ]"
         />
         <q-input
           bottom-slots
           v-model="editAddrress.formatted"
-          :label="$t(`addresses.table.columns.address`)"
+          label="Dirección"
           type="textarea"
-          :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+          :rules="[
+            (val) => (val && val.length > 0) || `Por favor escriba algo`,
+          ]"
         >
           <template v-slot:after>
             <q-btn
@@ -33,15 +37,17 @@
 
         <q-input
           v-model="editAddrress.apto"
-          :label="$t(`addresses.table.columns.apto`)"
+          label="Apartamento"
           lazy-rules
-          :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+          :rules="[
+            (val) => (val && val.length > 0) || `Por favor escriba algo`,
+          ]"
         />
 
         <div>
-          <q-btn label="Submit" type="submit" color="primary" />
+          <q-btn label="Guardar" type="submit" color="primary" />
           <q-btn
-            label="Reset"
+            label="Reiniciar"
             type="reset"
             color="primary"
             flat
@@ -57,7 +63,6 @@
 import { Notify } from "quasar";
 import { useMapsStore } from "src/stores/maps";
 import { ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export default {
   props: {
@@ -85,7 +90,7 @@ export default {
   setup(props, ctx) {
     const maps = useMapsStore();
     const { updateAddress, locator } = maps;
-    const { t } = useI18n();
+
     return {
       geolocate(address) {
         locator(address);
@@ -95,14 +100,14 @@ export default {
           await updateAddress(address);
           Notify.create({
             color: "info",
-            message: t("success"),
+            message: "La acción fue exitosa",
           });
           ctx.emit("select");
         } catch (error) {
           console.log(error);
           Notify.create({
             color: "warning",
-            message: t("failed"),
+            message: "Acción fallida",
           });
         }
       },

@@ -4,13 +4,13 @@
       <q-input
         v-model="nameuser"
         :label="$t(`login_card.fields.user`)"
-        :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+        :rules="[(val) => (val && val.length > 0) || `Por favor escriba algo`]"
       />
       <q-input
         v-model="password"
         :label="$t(`login_card.fields.pass`)"
         :type="isPwd ? 'password' : 'text'"
-        :rules="[(val) => (val && val.length > 0) || $t(`errors.emptyField`)]"
+        :rules="[(val) => (val && val.length > 0) || `Por favor escriba algo`]"
       >
         <template v-slot:append>
           <q-icon

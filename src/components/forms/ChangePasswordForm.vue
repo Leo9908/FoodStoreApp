@@ -2,25 +2,26 @@
   <div>
     <div style="height: 400; max-width: 300px">
       <q-card class="q-pa-md" flat bordered>
-        <q-card-section class="text-h5">{{
-          $t("login_card.changePassoword")
-        }}</q-card-section>
+        <q-card-section class="text-h5"
+          >Asistencia de contraseña
+        </q-card-section>
         <q-card-section class="on-left" align="left">
-          {{ $t("login_card.infoChangePass") }}
+          Ingrese la dirección de correo electrónico o nombre de usuario
+          asociado con su cuenta de Gustó.
         </q-card-section>
         <q-card-section>
           <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
             <q-input
               v-model="nameuserOrEmail"
-              label="Your user name or email *"
+              label="Nombre de usuario o contraseña *"
               :rules="[
-                (val) => (val && val.length > 0) || $t(`errors.emptyField`),
+                (val) => (val && val.length > 0) || `Por favor escriba algo`,
               ]"
             />
             <div>
-              <q-btn label="Submit" type="submit" color="primary" />
+              <q-btn label="Enviar" type="submit" color="primary" />
               <q-btn
-                label="Reset"
+                label="Reiniciar"
                 type="reset"
                 color="primary"
                 flat
@@ -37,7 +38,7 @@
 import { Notify } from "quasar";
 import { useAuthStore } from "src/stores/auth";
 import { defineComponent, ref } from "vue";
-import { useI18n } from "vue-i18n";
+
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -46,7 +47,7 @@ export default defineComponent({
     const nameuserOrEmail = ref(null);
     const auth = useAuthStore();
     const { sendEmailChangePassword } = auth;
-    const { t } = useI18n();
+
     return {
       nameuserOrEmail,
       router,
@@ -55,14 +56,14 @@ export default defineComponent({
           await sendEmailChangePassword(nameuserOrEmail.value);
           Notify.create({
             color: "info",
-            message: t("login_card.sendingEmail"),
+            message: "Le hemos enviado un correo",
           });
           router.push({ path: "/auth/login" });
         } catch (error) {
           console.log(error);
           Notify.create({
             color: "warning",
-            message: t("login_card.errorSending"),
+            message: "No existe ningún usuario con esas credenciales",
           });
         }
       },

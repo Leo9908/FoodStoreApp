@@ -7,16 +7,14 @@
         bordered
         style="height: 400; max-width: 300px"
       >
-        <q-card-section class="text-h5">{{
-          $t("login_card.register")
-        }}</q-card-section>
+        <q-card-section class="text-h5">Crear cuenta</q-card-section>
         <q-card-section>
           <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
             <q-input
               v-model="name"
               label="Your name *"
               :rules="[
-                (val) => (val && val.length > 0) || $t(`errors.emptyField`),
+                (val) => (val && val.length > 0) || `Por favor escriba algo`,
               ]"
               dense
             />
@@ -24,7 +22,7 @@
               v-model="last_name"
               label="Your last name *"
               :rules="[
-                (val) => (val && val.length > 0) || $t(`errors.emptyField`),
+                (val) => (val && val.length > 0) || `Por favor escriba algo`,
               ]"
               dense
             />
@@ -33,7 +31,7 @@
               type="email"
               label="Your email *"
               :rules="[
-                (val) => (val && val.length > 0) || $t(`errors.emptyField`),
+                (val) => (val && val.length > 0) || `Por favor escriba algo`,
               ]"
               dense
             />
@@ -41,7 +39,9 @@
               v-model="password"
               label="Your password *"
               :type="isPwd ? 'password' : 'text'"
-              :rules="[(val) => val.length >= 8 || $t(`errors.digites`, [8])]"
+              :rules="[
+                (val) => val.length >= 8 || `Debe contener más de 8 dígitos`,
+              ]"
               dense
             >
               <template v-slot:append>
@@ -59,9 +59,9 @@
             />
 
             <div>
-              <q-btn label="Submit" type="submit" color="primary" />
+              <q-btn label="Registrar" type="submit" color="primary" />
               <q-btn
-                label="Reset"
+                label="Reiniciar"
                 type="reset"
                 color="primary"
                 flat
@@ -72,10 +72,8 @@
         </q-card-section>
         <q-card-section>
           <div>
-            {{ $t("login_card.withAccount") }}
-            <RouterLink to="/auth/login">{{
-              $t("login_card.login")
-            }}</RouterLink>
+            ¿Ya tiene una cuenta?
+            <RouterLink to="/auth/login">Iniciar sesión</RouterLink>
           </div>
         </q-card-section>
       </q-card>
@@ -85,7 +83,6 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { Notify, useQuasar } from "quasar";
-import { useI18n } from "vue-i18n";
 
 import { useRegisterStore } from "src/stores/register";
 import { RouterLink, useRouter } from "vue-router";
@@ -100,7 +97,7 @@ export default defineComponent({
     const password = ref(null);
     const accept = ref(false);
     const notify = new useQuasar();
-    const { t } = useI18n();
+
     const router = useRouter();
     return {
       router,
@@ -117,7 +114,7 @@ export default defineComponent({
           Notify.create({
             color: "warning",
             icon: "warning",
-            message: t("login_card.terms"),
+            message: "Debe aceptar los terminos",
           });
         } else {
           try {
@@ -131,7 +128,7 @@ export default defineComponent({
             Notify.create({
               icon: "cloud_done",
               color: "info",
-              message: t("login_card.registerOk"),
+              message: "Usted se ha registrado correctamente",
             });
             router.push({ path: "/auth/login" });
           } catch (error) {
@@ -139,7 +136,7 @@ export default defineComponent({
             Notify.create({
               icon: "warning",
               color: "warning",
-              message: t("login_card.userExist"),
+              message: "El usuario ya existe",
             });
           }
         }

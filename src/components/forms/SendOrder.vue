@@ -9,11 +9,11 @@
         :options="options"
         color="primary"
         filled
-        :label="$t(`orders.form.addresses`)"
+        label="Escoja las direcciones de entrega"
         @focus="order.generateAddressOptions()"
         :disable="!isAutenticatedNow"
         use-chips
-        :rules="[(val) => val.length > 0 || $t(`errors.required`)]"
+        :rules="[(val) => val.length > 0 || `Campo obligatorio`]"
         ><template v-slot:after>
           <q-btn round dense flat icon="add" @click="addAddress()" /> </template
       ></q-select>
@@ -23,13 +23,13 @@
         color="primary"
         filled
         :rules="[
-          (val) => !!val || $t(`errors.required`),
-          (val) => val.length >= 8 || $t(`errors.digites`, [8]),
+          (val) => !!val || `Campo obligatorio`,
+          (val) => val.length >= 8 || `Debe contener más de 8 dígitos`,
         ]"
         lazy-rules
         mask="(##) ### - ###"
         unmasked-value
-        :label="$t(`orders.form.phone`)"
+        label="Contacto"
         :disable="!isAutenticatedNow"
       >
         <template v-slot:append>
@@ -89,7 +89,6 @@ import { storeToRefs } from "pinia";
 import { useOrdersStore } from "src/stores/orders";
 import { useProfileStore } from "src/stores/profile";
 import { useAuthStore } from "src/stores/auth";
-import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   beforeCreate() {
@@ -112,8 +111,6 @@ export default defineComponent({
 
     const auth = useAuthStore();
     const { isAutenticatedNow } = storeToRefs(auth);
-
-    const { t } = useI18n();
 
     return {
       preferred: ref("rock"),
@@ -146,7 +143,7 @@ export default defineComponent({
           try {
             order.sendOrder(data);
             Notify.create({
-              message: t("orders.send"),
+              message: "Pedido enviado",
               color: "info",
             });
           } catch (error) {
@@ -157,7 +154,7 @@ export default defineComponent({
           }
         } else {
           Notify.create({
-            message: t("products.errors.select"),
+            message: "Por favor, seleccione algún producto",
             color: "warning",
           });
         }

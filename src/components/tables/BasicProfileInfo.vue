@@ -12,21 +12,15 @@
             class="row no-wrap items-center q-my-lg justify-between"
             style="width: 100%"
           >
-            <div class="text-h4 q-ml-md text-black">
-              {{ $t("edit_profile.table.title") }}
-            </div>
+            <div class="text-h4 q-ml-md text-black">Información</div>
           </div>
         </tr>
       </thead>
       <tbody class="markup-body">
         <tr>
-          <td v-if="isDesktop" class="text-left">
-            {{ $t("edit_profile.table.name") }}
-          </td>
+          <td v-if="isDesktop" class="text-left">Nombre</td>
           <td class="text-left">
-            <div v-if="isMobile" class="text-overline">
-              {{ $t("edit_profile.table.name") }}
-            </div>
+            <div v-if="isMobile" class="text-overline">Nombre</div>
             {{ user.name }}
             <q-popup-edit
               class="popups"
@@ -42,7 +36,7 @@
                 counter
                 @keyup.enter="scope.set"
                 ref="myInput"
-                :rules="[(val) => !!val || $t(`errors.required`)]"
+                :rules="[(val) => !!val || `Campo obligatorio`]"
               />
             </q-popup-edit>
           </td>
@@ -51,19 +45,15 @@
           </td>
         </tr>
         <tr>
-          <td v-if="isDesktop" class="text-left">
-            {{ $t("edit_profile.table.last_name") }}
-          </td>
+          <td v-if="isDesktop" class="text-left">Apellidos</td>
           <td class="text-left">
-            <div v-if="isMobile" class="text-overline">
-              {{ $t("edit_profile.table.last_name") }}
-            </div>
+            <div v-if="isMobile" class="text-overline">Apellidos</div>
             {{ user.last_name }}
             <q-popup-edit
               v-model="user.last_name"
               buttons
-              :label-set="$t(`buttons_labels.save`)"
-              :label-cancel="$t(`buttons_labels.cancel`)"
+              label-set="Guardar"
+              label-cancel="Cancelar"
               v-slot="scope"
               :validate="() => !$refs.myInput.hasError"
             >
@@ -74,7 +64,7 @@
                 counter
                 @keyup.enter="scope.set"
                 ref="myInput"
-                :rules="[(val) => !!val || $t(`errors.required`)]"
+                :rules="[(val) => !!val || `Campo obligatorio`]"
               />
             </q-popup-edit>
           </td>
@@ -83,33 +73,27 @@
           </td>
         </tr>
         <tr>
-          <td v-if="isDesktop" class="text-left">
-            {{ $t("edit_profile.table.email") }}
-          </td>
+          <td v-if="isDesktop" class="text-left">Correo electrónico</td>
           <td class="text-left">
-            <div v-if="isMobile" class="text-overline">
-              {{ $t("edit_profile.table.email") }}
-            </div>
+            <div v-if="isMobile" class="text-overline">Correo electrónico</div>
             {{ user.email }}
             <q-popup-edit
               v-model="user.email"
               buttons
-              :label-set="$t(`buttons_labels.save`)"
-              :label-cancel="$t(`buttons_labels.cancel`)"
+              label-set="Guardar"
+              label-cancel="Cancelar"
               :validate="() => !$refs.myInput.hasError"
               v-slot="scope"
             >
               <q-input
                 type="email"
                 v-model="scope.value"
-                :hint="$t(`edit_profile.hints.email`)"
+                hint="Entre su correo"
                 dense
                 autofocus
                 @keyup.enter="scope.set"
                 ref="myInput"
-                :rules="[
-                  (value) => value.includes('@') || $t(`errors.letters`, [`@`]),
-                ]"
+                :rules="[(value) => value.includes('@') || `Debe contener @`]"
               />
             </q-popup-edit>
           </td>
@@ -118,16 +102,10 @@
           </td>
         </tr>
         <tr>
-          <td v-if="isDesktop" class="text-left">
-            {{ $t("edit_profile.table.phone") }}
-          </td>
+          <td v-if="isDesktop" class="text-left">Teléfono</td>
           <td class="text-left">
-            <div v-if="isMobile" class="text-overline">
-              {{ $t("edit_profile.table.phone") }}
-            </div>
-            {{
-              user.phone == null ? $t("edit_profile.table.noPhone") : user.phone
-            }}
+            <div v-if="isMobile" class="text-overline">Teléfono</div>
+            {{ user.phone == null ? `Teléfono no especificado` : user.phone }}
             <q-popup-edit
               v-model="user.phone"
               buttons
@@ -139,14 +117,12 @@
                 dense
                 autofocus
                 counter
-                :hint="$t(`edit_profile.hints.phone`)"
+                hint="Entre su teléfono"
                 mask="(##) ### - ###"
                 unmasked-value
                 @keyup.enter="scope.set"
                 ref="myInput"
-                :rules="[
-                  (val) => val.length >= 8 || $t(`errors.digites2`, [8]),
-                ]"
+                :rules="[(val) => val.length >= 8 || `Debe contener `]"
               />
             </q-popup-edit>
           </td>
@@ -195,13 +171,13 @@ export default defineComponent({
           await this.editUser(this.user);
           Notify.create({
             color: "info",
-            message: this.$t("edit_profile.edited"),
+            message: "Campo editado",
           });
         } catch (error) {
           console.log(error);
           Notify.create({
             color: "warning",
-            message: this.$t("edit_profile.noEdited"),
+            message: "No se ha podido editar el campo",
           });
         }
       },
