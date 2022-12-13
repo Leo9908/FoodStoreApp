@@ -42,7 +42,7 @@ export default route(function (/* { store, ssrContext } */) {
         to.path.includes("profile") ||
         to.path.includes("admin"))
     ) {
-      return { path: "/" };
+      return { name: "notFound" };
     }
     if (auth.isAutenticatedNow && to.path.includes("auth")) {
       return false;

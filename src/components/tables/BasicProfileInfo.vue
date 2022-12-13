@@ -105,7 +105,7 @@
           <td v-if="isDesktop" class="text-left">Teléfono</td>
           <td class="text-left">
             <div v-if="isMobile" class="text-overline">Teléfono</div>
-            {{ user.phone == null ? `Teléfono no especificado` : user.phone }}
+            {{ user.phone == null ? `No especificado` : user.phone }}
             <q-popup-edit
               v-model="user.phone"
               buttons

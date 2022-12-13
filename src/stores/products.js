@@ -78,7 +78,7 @@ export const useProductsStore = defineStore("products", {
     async getAllProducts() {
       try {
         this.products = await (
-          await api.get("/products", { headers: null })
+          await api.get("/products/no-deleted", { headers: null })
         ).data;
       } catch (error) {
         console.log(error);
@@ -172,23 +172,37 @@ export const useProductsStore = defineStore("products", {
         this.setProduct(edited, router);
       }
     },
-    async delete(id, t) {
+    async delete(id) {
       try {
         await api.delete(`/products/${id}`);
         Notify.create({
           color: "info",
           message: "Eliminado",
         });
+        const deleted = this.getProductById(id);
+        const index = this.products.indexOf(deleted);
+        this.products.splice(index, 1);
       } catch (error) {
-        console.log(error);
         Notify.create({
           color: "warning",
-          message: error,
+          message: "Error al eliminar el producto",
         });
       }
     },
     restartSearch() {
       this.isSearching = false;
+    },
+    async uploadImage(file) {
+      const auth = useAuthStore();
+      return new Promise((resolve, reject) => {
+        // Retrieve JWT token from your store.
+        const token = auth.token;
+        resolve({
+          url: "https://localhost:443/api/products-img/upload",
+          method: "POST",
+          headers: [{ name: "Authorization", value: `Bearer ${token}` }],
+        });
+      });
     },
   },
 });

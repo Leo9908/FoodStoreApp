@@ -19,7 +19,7 @@
       ></q-input>
       <slot name="select"></slot>
       <div>
-        <q-btn label="Submit" type="submit" color="primary" />
+        <q-btn label="Enviar" type="submit" color="primary" />
       </div>
     </q-form>
   </div>

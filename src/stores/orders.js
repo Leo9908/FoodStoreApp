@@ -88,7 +88,7 @@ export const useOrdersStore = defineStore("orders", {
     generateAddressOptions() {
       this.addressOptions = [];
       const maps = useMapsStore();
-      const addresses = maps.getAddresses;
+      const addresses = maps.addresses;
       addresses.forEach((address) => {
         this.addressOptions.push({ label: address.alias, value: address.id });
       });

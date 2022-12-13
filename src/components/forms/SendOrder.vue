@@ -43,38 +43,28 @@
       ></q-input>
       <div>
         <q-btn
-          label="Submit"
+          label="Enviar"
           type="submit"
           color="primary"
           :disable="!isAutenticatedNow"
         />
       </div>
     </q-form>
-
-    <q-card v-if="submitEmpty" flat bordered class="q-mt-md bg-grey-2">
-      <q-card-section> Submitted form contains empty formData. </q-card-section>
-    </q-card>
-    <q-card
-      v-else-if="submitResult.length > 0"
-      flat
-      bordered
-      class="q-mt-md bg-grey-2"
-    >
-      <q-card-section
-        >Submitted form contains the following formData (key =
-        value):</q-card-section
+    <div>
+      <q-card
+        v-if="submitResult.length > 0"
+        flat
+        bordered
+        class="q-mt-md bg-grey-2"
+        style="width: 400px"
       >
-      <q-separator />
-      <q-card-section class="row q-gutter-sm items-center">
-        <div
-          v-for="(item, index) in submitResult"
-          :key="index"
-          class="q-px-sm q-py-xs bg-grey-8 text-white rounded-borders text-center text-no-wrap"
-        >
-          {{ item.name }} = {{ item.value }}
-        </div>
-      </q-card-section>
-    </q-card>
+        <q-card-section>
+          <q-icon class="q-ma-sm" name="verified" size="32px" />
+          Gracias por comprar con Gustó. Su pedido llegará lo más pronto
+          posible.
+        </q-card-section>
+      </q-card>
+    </div>
   </div>
 </template>
 

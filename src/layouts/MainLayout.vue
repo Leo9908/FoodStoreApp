@@ -16,9 +16,6 @@
       </q-toolbar>
       <ProductsTabsVue class="float-center" />
     </q-header>
-    <div class="q-pa-xs q-gutter-sm">
-      <AuthDialogVue style="height: 0px" />
-    </div>
     <section>
       <div>
         <carousel-index-vue class="carousel" />
@@ -42,9 +39,8 @@
 import { defineComponent, ref } from "vue";
 
 import AvatarIcon from "components/AvatarIcon.vue";
-import AuthDialogVue from "src/components/auth/AuthDialog.vue";
 import ProductsTabsVue from "src/components/tabs/ProductsTabs.vue";
-import FooterIndexVue from "src/components/loyouts/FooterIndex.vue";
+import FooterIndexVue from "src/components/footers/FooterIndex.vue";
 import ButtonBasketVue from "src/components/buttons/ButtonBasket.vue";
 import CarouselIndexVue from "src/components/CarouselIndex.vue";
 import SearchProductVue from "src/components/inputs/SearchProduct.vue";
@@ -57,7 +53,6 @@ import { useQuasar } from "quasar";
 export default defineComponent({
   name: "MainLayout",
   components: {
-    AuthDialogVue,
     AvatarIcon,
     ProductsTabsVue,
     FooterIndexVue,

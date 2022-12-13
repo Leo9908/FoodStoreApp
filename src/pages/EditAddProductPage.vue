@@ -12,7 +12,14 @@
           @select="editAddProduct"
         >
           <template v-slot:left>
-            <FoodCardVue style="margin: 20px" :dish="product" />
+            <div class="q-gutter-sm" style="margin: 20px">
+              <UploaderVueVue>
+                <template v-slot:>
+                  <!-- Aquí debe ir la carta para que se muestre la imagen cargada -->
+                </template>
+              </UploaderVueVue>
+              <FoodCardVue :dish="product" />
+            </div>
           </template>
           <template v-slot:select>
             <q-select
@@ -41,6 +48,8 @@ import { ref } from "vue";
 
 import { useProductsStore } from "src/stores/products";
 
+import UploaderVueVue from "src/components/uploader/UploaderVue.vue";
+
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 
@@ -49,6 +58,7 @@ export default {
   components: {
     FormVueVue,
     FoodCardVue,
+    UploaderVueVue,
   },
   props: {
     id: { type: Number, required: false },

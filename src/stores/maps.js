@@ -12,9 +12,6 @@ export const useMapsStore = defineStore("maps", {
   }),
 
   getters: {
-    getAddresses(state) {
-      return state.addresses;
-    },
     getAddressById(state) {
       return (addressId) =>
         state.addresses.find((address) => address.id == addressId);
@@ -96,13 +93,13 @@ export const useMapsStore = defineStore("maps", {
         .then(() => {
           this.getAllAddress();
           Notify.create({
-            message: "Deleted",
+            message: "Dirección eliminada",
             color: "info",
           });
         })
         .catch((error) => {
           Notify.create({
-            message: error,
+            message: "Error al eliminar dirección",
             color: "warning",
           });
         });

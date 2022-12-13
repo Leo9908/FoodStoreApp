@@ -186,7 +186,6 @@ export default defineComponent({
   max-width: 300px;
   max-height: 400px;
   min-height: 400px;
-  margin: 5px;
   box-shadow: none;
 }
 .img_food {

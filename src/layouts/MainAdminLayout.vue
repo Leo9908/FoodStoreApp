@@ -78,7 +78,7 @@ export default {
   beforeRouteEnter(to, from) {
     const auth = useAuthStore();
     if (!auth.isAutenticatedNow || !auth.isAdmin) {
-      return false;
+      return { name: "notFound" };
     }
   },
   setup() {
