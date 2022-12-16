@@ -2,7 +2,7 @@
   <q-page padding>
     <!-- content -->
     <div :class="[isDesktop ? `q-ma-xl` : `q-ma-sm`, `q-pb-md`]">
-      <q-card bordered flat>
+      <q-card class="q-pb-md" bordered flat>
         <div class="text-h5 q-ma-sm" style="margin-left: 20px">
           {{ isEditing ? "Edición de productos" : "Nuevo producto" }}
         </div>
@@ -13,21 +13,16 @@
         >
           <template v-slot:left>
             <div class="q-gutter-sm" style="margin: 20px">
-              <UploaderVueVue>
+              <ProductCardVue :product="product" :isEditing="true" />
+              <UploaderVueVue @add="uploadImgProduct">
                 <template v-slot:>
                   <!-- Aquí debe ir la carta para que se muestre la imagen cargada -->
                 </template>
               </UploaderVueVue>
-              <FoodCardVue :dish="product" />
+              <!-- //aqui va la carta del producto -->
             </div>
           </template>
           <template v-slot:select>
-            <q-select
-              options-dense
-              v-model="accepted"
-              :options="options"
-              label="Tipo"
-            />
             <div>
               <q-toggle v-model="onSales" />¿Desesa poner el producto en venta?
             </div>
@@ -42,12 +37,12 @@
 import { storeToRefs } from "pinia";
 
 import FormVueVue from "src/components/forms/FormVue.vue";
-import FoodCardVue from "src/components/cards/FoodCard.vue";
 
 import { ref } from "vue";
 
 import { useProductsStore } from "src/stores/products";
 
+import ProductCardVue from "src/components/cards/ProductCard.vue";
 import UploaderVueVue from "src/components/uploader/UploaderVue.vue";
 
 import { useQuasar } from "quasar";
@@ -57,7 +52,7 @@ export default {
   // name: 'PageName',
   components: {
     FormVueVue,
-    FoodCardVue,
+    ProductCardVue,
     UploaderVueVue,
   },
   props: {
@@ -66,13 +61,11 @@ export default {
   beforeCreate() {
     if (this.exitProduct(this.id)) {
       this.product = Object.assign({}, this.getProductById(this.id));
-      this.type = this.getProductType(this.product.type);
       this.onSales = this.product.onSale;
     }
-    this.options = this.getAllTypes();
     this.$bus.on("updated", (data) => {
       this.product.name = data[0].value;
-      this.product.precio = data[1].value;
+      this.product.price = data[1].value;
       this.product.description = data[2].value;
     });
   },
@@ -82,7 +75,8 @@ export default {
         .dialog({
           title: "Confirmar",
           message: "¿Desea salir sin guardar el producto?",
-          cancel: true,
+          cancel: "Cancelar",
+          ok: "Aceptar",
           persistent: true,
         })
         .onOk(() => {
@@ -109,8 +103,11 @@ export default {
           index: 1,
           label: "Precio",
           name: "price",
-          value: this.product.precio ? this.product.precio : null,
-          rules: [(val) => !!val || "Campo requerido"],
+          value: this.product.price ? this.product.price : null,
+          rules: [
+            (val) => !!val || "Campo requerido",
+            (val) => val > 0 || `Por favor entre un precio real`,
+          ],
         },
         {
           index: 2,
@@ -127,35 +124,27 @@ export default {
     };
     return {
       inputs,
-      accepted: ref({
-        label: this.type ? this.type : this.options[0].label,
-        value: this.product.type ? this.product.type : this.options[0].value,
-      }),
     };
   },
   setup(props) {
     const router = useRouter();
     const products = useProductsStore();
-    const { getProductById, exitProduct, getAllTypes, getProductType } =
-      storeToRefs(products);
-    const { updateProduct } = products;
+    const { getProductById, exitProduct, imgServer } = storeToRefs(products);
+    const { updateProduct, uploadImage } = products;
     const product = ref({});
-    const type = ref(null);
-    const options = ref([]);
-
     const $q = useQuasar();
     const isEditing = props.id != undefined ? true : false;
     const isSave = ref(false);
+    const filename = ref(null);
     return {
       router,
       getProductById,
       exitProduct,
-      getAllTypes,
-      getProductType,
+      imgServer,
       updateProduct,
+      uploadImage,
       product,
-      type,
-      options,
+      filename,
 
       isMobile: $q.platform.is.mobile,
       isDesktop: $q.platform.is.desktop,
@@ -165,26 +154,32 @@ export default {
     };
   },
   methods: {
+    uploadImgProduct(filename) {
+      if (filename != null) {
+        this.filename = filename;
+        this.product.imgUrl = this.imgServer + filename;
+      }
+    },
     editAddProduct(data) {
       if (data != undefined) {
         this.isSave = true;
         const edited = {
           id: this.product.id,
           name: data[0].value,
-          precio: data[1].value,
+          price: data[1].value,
           description: data[2].value,
-          type: this.accepted.value,
           onSale: this.onSales,
           //para probar nada mas
-          imgUrl: "src/assets/icons/chef_hat.png",
+          imgUrl: this.imgServer + this.filename,
         };
         this.updateProduct(edited, this.router);
+      } else {
+        Notify.create({
+          color: "warning",
+          icon: "warning",
+          message: "Por favor agregue una imagen al producto",
+        });
       }
-    },
-  },
-  watch: {
-    accepted(newVal, oldVal) {
-      this.product.type = newVal.value;
     },
   },
 };

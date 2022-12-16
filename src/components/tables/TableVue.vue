@@ -1,6 +1,7 @@
 <template>
   <div class="q-pa-md">
     <q-table
+      :grid="false"
       flat
       bordered
       class="q-px-sm"
@@ -85,7 +86,8 @@ export default {
       $q.dialog({
         title: "Confirmar",
         message: `¿Desea eliminar ${props.ptype.pronoun} ${props.ptype.name}?`,
-        cancel: true,
+        cancel: "Cancelar",
+        ok: "Aceptar",
         persistent: true,
       }).onOk(() => {
         ctx.emit("click", id, true);

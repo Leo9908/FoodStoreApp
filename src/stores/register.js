@@ -17,13 +17,6 @@ export const useRegisterStore = defineStore("register", {
   },
 
   actions: {
-    async registerUser(payload) {
-      await api.post("/auth/register", payload).then((response) => {
-        console.log(response);
-        this.setStatus(response.status);
-        this.setMessage(response.data.message);
-      });
-    },
     setStatus(status) {
       this.status = status;
     },

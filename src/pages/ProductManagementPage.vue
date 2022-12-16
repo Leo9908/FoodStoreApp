@@ -32,7 +32,7 @@ export default {
     const router = useRouter();
     const product = useProductsStore();
     const { getAllProducts } = product;
-    const { products, getProductType } = storeToRefs(product);
+    const { products } = storeToRefs(product);
     const columns = [
       {
         name: "name",
@@ -47,13 +47,7 @@ export default {
         name: "precio",
         align: "center",
         label: "Precio",
-        field: "precio",
-        sortable: true,
-      },
-      {
-        name: "type",
-        label: "Tipo",
-        field: (row) => getProductType.value(row.type),
+        field: "price",
         sortable: true,
       },
       {

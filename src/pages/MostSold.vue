@@ -1,40 +1,55 @@
 <template>
-  <q-page class="index flex flex-center q-mb-md">
-    <food-card-vue v-for="d in products" v-bind:key="d" :dish="d" />
-    <q-card
-      v-if="
-        mostSoldDishes.length == 0 ||
-        (isSearching && searchedDishes.length == 0)
-      "
-      flat
-      bordered
-      class="q-ma-md bg-grey-2"
-    >
-      <q-card-section>{{
-        !isSearching
-          ? `Lo sentimos. No hay productos
-             en venta en estos momentos,
-             por favor regrese más tarde. Gracias`
-          : `No hay coincidencias`
-      }}</q-card-section>
-    </q-card>
+  <q-page padding class="index flex flex-center q-mb-md">
+    <div>
+      <div v-for="d in products" :key="d">
+        <product-card-vue
+          :product="d"
+          :selected="isSelected(d.id)"
+          :amount="numberProduct(d.id)"
+          @add="selectProduct"
+          @select="ratingProduct"
+          @increment="increment"
+        />
+      </div>
+    </div>
+    <div class="index flex flex-center q-ma-md">
+      <q-card
+        v-if="
+          mostSoldDishes.length == 0 ||
+          (isSearching && searchedDishes.length == 0)
+        "
+        flat
+        bordered
+        class="q-ma-md bg-grey-2"
+      >
+        <q-card-section>{{
+          !isSearching
+            ? `Lo sentimos. No hay productos
+             en esta sección, por favor regrese
+             más tarde. Gracias`
+            : `No hay coincidencias`
+        }}</q-card-section>
+      </q-card>
+    </div>
   </q-page>
 </template>
 
 <script>
 import { defineComponent } from "vue";
 
-import FoodCardVue from "src/components/cards/FoodCard.vue";
+import ProductCardVue from "src/components/cards/ProductCard.vue";
 
 import { useProductsStore } from "stores/products";
 
 import { storeToRefs } from "pinia";
+import { useOrdersStore } from "src/stores/orders";
 
 export default defineComponent({
-  name: "MostSold",
+  name: "IndexPage",
   components: {
-    FoodCardVue,
+    ProductCardVue,
   },
+
   created() {
     try {
       this.getMostSoldProducts();
@@ -44,14 +59,28 @@ export default defineComponent({
   },
   setup() {
     const product = useProductsStore();
+    const orders = useOrdersStore();
     const { mostSoldDishes, searchedDishes, isSearching } =
       storeToRefs(product);
-    const { getMostSoldProducts } = product;
+    const { getMostSoldProducts, doRating } = product;
+    const { isSelected, numberProduct } = storeToRefs(orders);
+    const { addProduct, deleteProduct, increment, decrement } = orders;
     return {
       mostSoldDishes,
       getMostSoldProducts,
+      isSelected,
+      numberProduct,
       searchedDishes,
       isSearching,
+      selectProduct(id, action) {
+        action ? addProduct(id) : deleteProduct(id);
+      },
+      ratingProduct(id, stars) {
+        doRating(id, stars);
+      },
+      increment(id, action) {
+        action ? increment(id) : decrement(id);
+      },
     };
   },
   computed: {

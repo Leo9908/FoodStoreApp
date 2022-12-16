@@ -40,6 +40,22 @@ export const useAuthStore = defineStore("auth", {
   },
 
   actions: {
+    async registerUser(payload, router) {
+      try {
+        await api.post("/auth/register", payload);
+        Notify.create({
+          color: "info",
+          message: "Usted se ha registrado correctamente",
+        });
+        router.push({ name: "loginUser" });
+      } catch (error) {
+        console.log(error);
+        Notify.create({
+          color: "warning",
+          message: error.message,
+        });
+      }
+    },
     async doLogin(payload, router) {
       try {
         const token = await (

@@ -12,7 +12,7 @@
           <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
             <q-input
               v-model="name"
-              label="Your name *"
+              label="Nombre"
               :rules="[
                 (val) => (val && val.length > 0) || `Por favor escriba algo`,
               ]"
@@ -20,7 +20,7 @@
             />
             <q-input
               v-model="last_name"
-              label="Your last name *"
+              label="Apellidos"
               :rules="[
                 (val) => (val && val.length > 0) || `Por favor escriba algo`,
               ]"
@@ -29,7 +29,7 @@
             <q-input
               v-model="email"
               type="email"
-              label="Your email *"
+              label="Correo electrónico"
               :rules="[
                 (val) => (val && val.length > 0) || `Por favor escriba algo`,
               ]"
@@ -37,12 +37,14 @@
             />
             <q-input
               v-model="password"
-              label="Your password *"
+              label="Contraseña"
               :type="isPwd ? 'password' : 'text'"
               :rules="[
-                (val) => val.length >= 8 || `Debe contener más de 8 dígitos`,
+                (val) => (val && val.length > 0) || `Por favor escriba algo`,
+                (val) =>
+                  (val && val.length > 8) ||
+                  `Debe contener al menos 8 caracteres`,
               ]"
-              dense
             >
               <template v-slot:append>
                 <q-icon
@@ -55,7 +57,7 @@
             <q-toggle
               class="float-left q-mb-lg"
               v-model="accept"
-              label="I accept the terms"
+              label="Acepto los terminos"
             />
 
             <div>
@@ -82,23 +84,23 @@
 </template>
 <script>
 import { defineComponent, ref } from "vue";
-import { Notify, useQuasar } from "quasar";
+import { Notify } from "quasar";
 
-import { useRegisterStore } from "src/stores/register";
+import { useAuthStore } from "src/stores/auth";
 import { RouterLink, useRouter } from "vue-router";
 
 export default defineComponent({
   setup() {
-    const register = useRegisterStore();
-    const { registerUser } = register;
+    const router = useRouter();
+
+    const auth = useAuthStore();
+    const { registerUser } = auth;
     const name = ref(null);
     const last_name = ref(null);
     const email = ref(null);
     const password = ref(null);
     const accept = ref(false);
-    const notify = new useQuasar();
 
-    const router = useRouter();
     return {
       router,
       name,
@@ -107,7 +109,6 @@ export default defineComponent({
       password,
       accept,
       registerUser,
-      notify,
       isPwd: ref(true),
       async onSubmit() {
         if (accept.value !== true) {
@@ -117,28 +118,16 @@ export default defineComponent({
             message: "Debe aceptar los terminos",
           });
         } else {
-          try {
-            await registerUser({
+          await registerUser(
+            {
               name: name.value,
               last_name: last_name.value,
               user: email.value.substring(0, email.value.indexOf("@")),
               email: email.value,
               pass: password.value,
-            });
-            Notify.create({
-              icon: "cloud_done",
-              color: "info",
-              message: "Usted se ha registrado correctamente",
-            });
-            router.push({ path: "/auth/login" });
-          } catch (error) {
-            console.log(error);
-            Notify.create({
-              icon: "warning",
-              color: "warning",
-              message: "El usuario ya existe",
-            });
-          }
+            },
+            router
+          );
         }
       },
       onReset() {

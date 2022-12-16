@@ -122,7 +122,9 @@
                 unmasked-value
                 @keyup.enter="scope.set"
                 ref="myInput"
-                :rules="[(val) => val.length >= 8 || `Debe contener `]"
+                :rules="[
+                  (val) => val.length >= 8 || `Debe contener 8 dígitos `,
+                ]"
               />
             </q-popup-edit>
           </td>

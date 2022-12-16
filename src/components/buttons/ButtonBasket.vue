@@ -1,6 +1,6 @@
 <template>
   <RouterLink to="buyout" style="text-decoration: inherit; color: inherit"
-    ><q-btn round color="secondary" icon="shopping_basket">
+    ><q-btn round color="secondary" icon="shopping_cart">
       <q-badge color="red" floating transparent>
         {{ props.number }}
       </q-badge>

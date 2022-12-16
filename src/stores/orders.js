@@ -48,13 +48,17 @@ export const useOrdersStore = defineStore("orders", {
     },
     increment(productId) {
       let value = this.productList.get(productId);
-      this.productList.set(productId, ++value);
-      this.total++;
+      if (value < 20) {
+        this.productList.set(productId, ++value);
+        this.total++;
+      }
     },
     decrement(productId) {
       let value = this.productList.get(productId);
-      this.productList.set(productId, --value);
-      this.total--;
+      if (value > 1) {
+        this.productList.set(productId, --value);
+        this.total--;
+      }
     },
     updateAmount(productId, amount, initialAmount) {
       let newValue = initialAmount - amount;

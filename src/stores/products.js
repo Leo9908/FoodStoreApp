@@ -14,6 +14,7 @@ export const useProductsStore = defineStore("products", {
     mostSoldDishes: [],
     isSearching: ref(false),
     products: [],
+    imgServer: `${process.env.API}/products-img/files/`,
   }),
 
   getters: {
@@ -23,44 +24,11 @@ export const useProductsStore = defineStore("products", {
     },
     getPrice(state) {
       return (productd) =>
-        state.onSaleDishes.find((product) => product.id == productd).precio;
+        state.onSaleDishes.find((product) => product.id == productd).price;
     },
     getRating(state) {
       return (productId) =>
         state.onSaleDishes.find((product) => product.id == productId).rating;
-    },
-    getProductType(state) {
-      return (type) => {
-        switch (type) {
-          case 1:
-            return "Desayuno";
-          case 2:
-            return "Almuerzo";
-          case 3:
-            return "Cena";
-          case 4:
-            return "Ensalada";
-          case 5:
-            return "Comida rápida";
-          case 6:
-            return "Comida enlatada";
-          case 7:
-            return "Guarnición";
-          default:
-            return "Desayuno";
-        }
-      };
-    },
-    getAllTypes(state) {
-      return () => [
-        { label: "Desayuno", value: 1 },
-        { label: "Almuerzo", value: 2 },
-        { label: "Cena", value: 3 },
-        { label: "Ensalada", value: 4 },
-        { label: "Comida rápida", value: 5 },
-        { label: "Comida enlatada", value: 6 },
-        { label: "Guarnición", value: 7 },
-      ];
     },
     getProductById(state) {
       return (id) => state.products.find((product) => product.id == id);
@@ -71,9 +39,13 @@ export const useProductsStore = defineStore("products", {
   },
   actions: {
     async getOnSaleProducts() {
-      await api.get("/products/on-sale", { headers: null }).then((response) => {
-        this.onSaleDishes = response.data;
-      });
+      try {
+        this.onSaleDishes = await (
+          await api.get("/products/on-sale", { headers: null })
+        ).data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getAllProducts() {
       try {
@@ -102,13 +74,22 @@ export const useProductsStore = defineStore("products", {
     },
     async doRating(productId, stars) {
       const user = useAuthStore();
-      await api
-        .post(`/products/${user.getUserId}/${productId}/ratings`, {
+      try {
+        await api.post(`/products/${user.getUserId}/${productId}/ratings`, {
           stars: stars,
-        })
-        .then(() => {
-          this.updateRating(productId);
         });
+        this.updateRating(productId);
+        Notify.create({
+          message: "Gracias por su calificación",
+          color: "info",
+          icon: "thumb_up",
+        });
+      } catch (error) {
+        Notify.create({
+          message: error,
+          color: "warning",
+        });
+      }
     },
     async updateRating(productId) {
       await api.get(`/products/${productId}/ratings`).then((response) => {
@@ -117,15 +98,18 @@ export const useProductsStore = defineStore("products", {
       });
     },
     async searchDishes(keyWord) {
-      await api
-        .get(`/products/search/?keyWord=${keyWord}`)
-        .then((response) => {
-          this.isSearching = true;
-          this.searchedDishes = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      try {
+        this.searchedDishes = await (
+          await api.get(`/products/search/?keyWord=${keyWord}`)
+        ).data;
+        console.log(this.searchDishes);
+        this.isSearching = true;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    restartSearch() {
+      this.isSearching = false;
     },
     async setProduct(product, router) {
       if (product.id == null) {
@@ -189,20 +173,26 @@ export const useProductsStore = defineStore("products", {
         });
       }
     },
-    restartSearch() {
-      this.isSearching = false;
-    },
     async uploadImage(file) {
       const auth = useAuthStore();
       return new Promise((resolve, reject) => {
         // Retrieve JWT token from your store.
         const token = auth.token;
         resolve({
-          url: "https://localhost:443/api/products-img/upload",
+          url: "https://localhost/api/products-img/upload",
           method: "POST",
           headers: [{ name: "Authorization", value: `Bearer ${token}` }],
         });
       });
+    },
+    async downloadImages(id) {
+      try {
+        const urls = await (
+          await api.get("/products-img/files/{filename:.+}")
+        ).data;
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 });
