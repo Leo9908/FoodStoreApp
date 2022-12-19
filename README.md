@@ -1,2 +1,2 @@
-# FoodStoreApp
-Fronten de proyecto ISW2
+# FoordStoreApp
+ Proyecto de año Ingenieria de Software
