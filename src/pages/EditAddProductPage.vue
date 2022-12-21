@@ -9,21 +9,23 @@
         <form-vue-vue
           class="q-gutter-md"
           :data="inputs"
-          @select="editAddProduct"
+          @submit="editAddProduct"
         >
           <template v-slot:left>
             <div class="q-gutter-sm" style="margin: 20px">
-              <ProductCardVue :product="product" :isEditing="true" />
-              <UploaderVueVue @add="uploadImgProduct">
-                <template v-slot:>
-                  <!-- Aquí debe ir la carta para que se muestre la imagen cargada -->
-                </template>
-              </UploaderVueVue>
-              <!-- //aqui va la carta del producto -->
+              <ProductCardVue :product="product" :isEditing="true">
+                <template v-slot:uploader> </template>
+              </ProductCardVue>
             </div>
           </template>
           <template v-slot:select>
             <div>
+              <FilePickerVueVue
+                @add="uploadImgProduct"
+                :rules="[
+                  (val) => val.length < 1 || 'Please use maximum 3 characters',
+                ]"
+              />
               <q-toggle v-model="onSales" />¿Desesa poner el producto en venta?
             </div>
           </template>
@@ -43,9 +45,10 @@ import { ref } from "vue";
 import { useProductsStore } from "src/stores/products";
 
 import ProductCardVue from "src/components/cards/ProductCard.vue";
-import UploaderVueVue from "src/components/uploader/UploaderVue.vue";
+// import UploaderVueVue from "src/components/uploader/UploaderVue.vue";
+import FilePickerVueVue from "src/components/file-picker/FilePickerVue.vue";
 
-import { useQuasar } from "quasar";
+import { Notify, useQuasar } from "quasar";
 import { useRouter } from "vue-router";
 
 export default {
@@ -53,7 +56,8 @@ export default {
   components: {
     FormVueVue,
     ProductCardVue,
-    UploaderVueVue,
+    // UploaderVueVue,
+    FilePickerVueVue,
   },
   props: {
     id: { type: Number, required: false },
@@ -121,6 +125,9 @@ export default {
           ],
         },
       ],
+      buttons: [
+        { index: 0, label: "Enviar", type: "submit", color: "primary" },
+      ],
     };
     return {
       inputs,
@@ -130,12 +137,12 @@ export default {
     const router = useRouter();
     const products = useProductsStore();
     const { getProductById, exitProduct, imgServer } = storeToRefs(products);
-    const { updateProduct, uploadImage } = products;
+    const { updateProduct, uploadImage, deleteImage } = products;
     const product = ref({});
     const $q = useQuasar();
     const isEditing = props.id != undefined ? true : false;
     const isSave = ref(false);
-    const filename = ref(null);
+    const file = ref(null);
     return {
       router,
       getProductById,
@@ -143,8 +150,9 @@ export default {
       imgServer,
       updateProduct,
       uploadImage,
+      deleteImage,
       product,
-      filename,
+      file,
 
       isMobile: $q.platform.is.mobile,
       isDesktop: $q.platform.is.desktop,
@@ -154,30 +162,55 @@ export default {
     };
   },
   methods: {
-    uploadImgProduct(filename) {
-      if (filename != null) {
-        this.filename = filename;
-        this.product.imgUrl = this.imgServer + filename;
+    uploadImgProduct(file) {
+      if (file != null) {
+        this.file = file;
+        this.product.imgUrl = URL.createObjectURL(file);
+      } else if (file == null) {
+        this.file = null;
+        this.product.imgUrl = null;
       }
     },
     editAddProduct(data) {
-      if (data != undefined) {
-        this.isSave = true;
-        const edited = {
-          id: this.product.id,
-          name: data[0].value,
-          price: data[1].value,
-          description: data[2].value,
-          onSale: this.onSales,
-          //para probar nada mas
-          imgUrl: this.imgServer + this.filename,
-        };
-        this.updateProduct(edited, this.router);
+      if (this.file != null || this.product.imgName != null) {
+        if (data != undefined) {
+          this.isSave = true;
+          /**
+           * Esto es para poder borrar la imagen anterior del producto
+           * en caso de que se esté editando
+           */
+          const temp = this.product.imgName;
+          const edited = {
+            id: this.product.id,
+            name: data[0].value,
+            price: data[1].value,
+            description: data[2].value,
+            onSale: this.onSales,
+            imgUrl:
+              this.file != null
+                ? this.imgServer + this.file.name
+                : this.imgServer + this.product.imgName,
+            imgName: this.file != null ? this.file.name : this.product.imgName,
+          };
+          this.updateProduct(edited, this.router);
+          this.uploadImage(this.file);
+          /**
+           * Aqui termino de borrar la imagen anterior
+           */
+          if (this.isEditing && this.file != null) {
+            this.deleteImage(temp, this.isEditing);
+          }
+        } else {
+          Notify.create({
+            color: "warning",
+            icon: "warning",
+            message: "Por favor agregue una imagen al producto",
+          });
+        }
       } else {
         Notify.create({
           color: "warning",
-          icon: "warning",
-          message: "Por favor agregue una imagen al producto",
+          message: "Debe escoger una imagen para el producto",
         });
       }
     },

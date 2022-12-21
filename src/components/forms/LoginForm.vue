@@ -1,47 +1,35 @@
 <template>
   <div>
-    <div style="height: 400; max-width: 300px">
-      <q-card class="q-pa-md" flat bordered>
+    <div style="height: 400; max-width: 310px">
+      <q-card flat bordered>
         <q-card-section class="text-h5">Iniciar sesión</q-card-section>
         <q-card-section>
-          <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
-            <q-input
-              v-model="nameuser"
-              label="Nombre de usuario o correo"
-              :rules="[
-                (val) => (val && val.length > 0) || `Por favor escriba algo`,
-              ]"
-            />
-            <q-input
-              v-model="password"
-              label="Contraseña"
-              :type="isPwd ? 'password' : 'text'"
-              :rules="[
-                (val) => (val && val.length > 0) || `Por favor escriba algo`,
-              ]"
-            >
-              <template v-slot:append>
-                <q-icon
-                  :name="isPwd ? 'visibility_off' : 'visibility'"
-                  class="cursor-pointer"
-                  @click="isPwd = !isPwd"
-                /> </template
-            ></q-input>
-            <div class="q-gutter-sm">
-              <q-btn label="Iniciar sesión" type="submit" color="primary" />
-              <q-btn
-                label="Reiniciar"
-                type="reset"
-                color="primary"
-                flat
-                class="q-ml-sm"
-              />
-            </div>
-          </q-form>
+          <form-vue-vue :data="data" @submit="onSubmit" @reset="onReset">
+            <template v-slot:select>
+              <div>
+                <q-input
+                  v-model="password"
+                  label="Contraseña"
+                  :type="isPwd ? 'password' : 'text'"
+                  :rules="[
+                    (val) =>
+                      (val && val.length > 0) || `Por favor escriba algo`,
+                  ]"
+                >
+                  <template v-slot:append>
+                    <q-icon
+                      :name="isPwd ? 'visibility_off' : 'visibility'"
+                      class="cursor-pointer"
+                      @click="isPwd = !isPwd"
+                    /> </template
+                ></q-input>
+              </div>
+            </template>
+          </form-vue-vue>
         </q-card-section>
         <q-card-section>
           <router-link class="change_pass" to="/auth/change-password">
-            ¿Olvidaste tu contraseña?
+            ¿Olvidó su contraseña?
           </router-link>
         </q-card-section>
       </q-card>
@@ -66,23 +54,50 @@ import { defineComponent, ref } from "vue";
 
 import { useRouter } from "vue-router";
 
+import FormVueVue from "./FormVue.vue";
+
 export default defineComponent({
+  components: {
+    FormVueVue,
+  },
+  data() {
+    const data = {
+      inputs: [
+        {
+          index: 0,
+          label: "Nombre de usuario",
+          name: "username",
+          value: ref(null),
+          rules: [(val) => (val && val.length > 0) || `Por favor escriba algo`],
+        },
+      ],
+      buttons: [
+        { index: 0, label: "Iniciar sesión", type: "submit", color: "primary" },
+        {
+          index: 1,
+          label: "Reiniciar",
+          type: "reset",
+          color: "primary",
+          flat: true,
+        },
+      ],
+    };
+    return { data };
+  },
   setup() {
     const router = useRouter();
     const auth = useAuthStore();
     const { doLogin } = auth;
-    const nameuser = ref(null);
     const password = ref(null);
 
     return {
       router,
-      nameuser,
       password,
       isPwd: ref(true),
-      async onSubmit() {
-        await doLogin(
+      onSubmit(data) {
+        doLogin(
           {
-            usernameOrEmail: nameuser.value,
+            usernameOrEmail: data[0].value,
             password: password.value,
           },
 
@@ -90,7 +105,6 @@ export default defineComponent({
         );
       },
       onReset() {
-        nameuser.value = null;
         password.value = null;
       },
     };

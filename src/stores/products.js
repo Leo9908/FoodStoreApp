@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { Notify } from "quasar";
+import { Notify, useQuasar } from "quasar";
 
 import { api } from "src/boot/axios";
 import { ref } from "vue";
@@ -33,6 +33,9 @@ export const useProductsStore = defineStore("products", {
     getProductById(state) {
       return (id) => state.products.find((product) => product.id == id);
     },
+    getOnSaleProductById(state) {
+      return (id) => state.onSaleDishes.find((product) => product.id == id);
+    },
     exitProduct(state) {
       return (id) => state.products.find((product) => product.id == id) != null;
     },
@@ -47,13 +50,34 @@ export const useProductsStore = defineStore("products", {
         console.log(error);
       }
     },
-    async getAllProducts() {
-      try {
-        this.products = await (
-          await api.get("/products/no-deleted", { headers: null })
-        ).data;
-      } catch (error) {
-        console.log(error);
+    async getAllProducts(pageNum, pageSize, sortBy, sortDir, filter) {
+      if (
+        pageNum != undefined &&
+        pageSize != undefined &&
+        sortBy != undefined &&
+        sortDir != undefined &&
+        filter != undefined
+      ) {
+        try {
+          const config = {
+            headers: null,
+            params: {
+              pageNum: pageNum,
+              pageSize: pageSize,
+              sortBy: sortBy,
+              sortDir: sortDir == true ? `asc` : `desc`,
+              filter: filter,
+            },
+          };
+          this.products = await (await api.get("/products", config)).data;
+          console.log(
+            `/products?pageNum=${config.params.pageNum}&pageSize=${config.params.pageSize}&sortBy=${config.params.sortBy}&sortDir=${config.params.sortDir}&filter=${config.params.filter}`
+          );
+          console.log(config);
+          console.log(this.products);
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
     async getFavoritesProducts() {
@@ -102,7 +126,6 @@ export const useProductsStore = defineStore("products", {
         this.searchedDishes = await (
           await api.get(`/products/search/?keyWord=${keyWord}`)
         ).data;
-        console.log(this.searchDishes);
         this.isSearching = true;
       } catch (error) {
         console.log(error);
@@ -156,7 +179,7 @@ export const useProductsStore = defineStore("products", {
         this.setProduct(edited, router);
       }
     },
-    async delete(id) {
+    async delete(id, place) {
       try {
         await api.delete(`/products/${id}`);
         Notify.create({
@@ -166,6 +189,7 @@ export const useProductsStore = defineStore("products", {
         const deleted = this.getProductById(id);
         const index = this.products.indexOf(deleted);
         this.products.splice(index, 1);
+        this.deleteImage(deleted.imgName);
       } catch (error) {
         Notify.create({
           color: "warning",
@@ -174,16 +198,32 @@ export const useProductsStore = defineStore("products", {
       }
     },
     async uploadImage(file) {
-      const auth = useAuthStore();
-      return new Promise((resolve, reject) => {
-        // Retrieve JWT token from your store.
-        const token = auth.token;
-        resolve({
-          url: "https://localhost/api/products-img/upload",
-          method: "POST",
-          headers: [{ name: "Authorization", value: `Bearer ${token}` }],
-        });
-      });
+      if (file != null) {
+        const formData = new FormData();
+        // const defineName = "product"+this.products.length+1+file
+        formData.append("file", file);
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        };
+        try {
+          await api.post(
+            "https://localhost/api/products-img/upload",
+            formData,
+            config
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    },
+    async deleteImage(filename) {
+      try {
+        await api.delete(`/products-img/${filename}`);
+      } catch (error) {
+        console.log(error);
+      }
     },
     async downloadImages(id) {
       try {

@@ -1,17 +1,18 @@
 <template>
-  <q-page padding>
-    <div class="index flex flex-center q-mb-md">
-      <div v-for="d in products" :key="d">
-        <product-card-vue
-          class="example-cell"
-          :product="d"
-          :selected="isSelected(d.id)"
-          :amount="numberProduct(d.id)"
-          @add="selectProduct"
-          @select="ratingProduct"
-          @increment="increment"
-        />
-      </div>
+  <q-page class="body">
+    <!-- class="index flex flex-center q-mb-md" -->
+    <div class="container content-center">
+      <product-card-vue
+        class="box"
+        v-for="d in products"
+        :key="d"
+        :product="d"
+        :selected="isSelected(d.id)"
+        :amount="numberProduct(d.id)"
+        @add="selectProduct"
+        @select="ratingProduct"
+        @increment="increment"
+      />
     </div>
     <div class="index flex flex-center q-mb-md">
       <q-card
@@ -50,7 +51,6 @@ export default defineComponent({
   components: {
     ProductCardVue,
   },
-
   created() {
     try {
       this.getOnSaleProducts();
@@ -67,7 +67,6 @@ export default defineComponent({
     const { addProduct, deleteProduct, increment, decrement } = orders;
     return {
       downloadImages,
-
       onSaleDishes,
       getOnSaleProducts,
       isSelected,
@@ -95,3 +94,42 @@ export default defineComponent({
   },
 });
 </script>
+<style lang="scss">
+.body {
+  margin: 0;
+  padding: 0;
+}
+.container {
+  width: 1200px;
+  margin: 20px auto;
+  columns: 4;
+  column-gap: 20px;
+}
+.container .box {
+  width: 100%;
+  margin: 0 0 20px;
+  overflow: hidden;
+  break-inside: avoid;
+}
+.container .box img {
+  max-width: 100%;
+}
+@media (max-width: 1200px) {
+  .container {
+    columns: 3;
+    width: calc(100% - 40px);
+    box-sizing: border-box;
+    padding: 20px 20px 20px 0;
+  }
+}
+@media (max-width: 480px) {
+  .container {
+    columns: 2;
+  }
+}
+@media (max-width: 768px) {
+  .container {
+    columns: 1;
+  }
+}
+</style>

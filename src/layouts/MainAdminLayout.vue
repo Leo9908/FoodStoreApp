@@ -39,7 +39,7 @@
             <q-item-section> Reportes de ventas </q-item-section>
           </q-item>
 
-          <q-item clickable v-ripple @click="router.push({ name: `home` })">
+          <q-item clickable v-ripple @click="goHome">
             <q-item-section avatar>
               <q-icon name="store" />
             </q-item-section>
@@ -70,6 +70,7 @@ import { ref } from "vue";
 import AvatarIconVue from "src/components/AvatarIcon.vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "src/stores/auth";
+import { useQuasar } from "quasar";
 
 export default {
   components: {
@@ -84,11 +85,23 @@ export default {
   setup() {
     const leftDrawerOpen = ref(false);
     const router = useRouter();
+    const $q = useQuasar();
     return {
       leftDrawerOpen,
       router,
       toggleLeftDrawer() {
         leftDrawerOpen.value = !leftDrawerOpen.value;
+      },
+      goHome() {
+        $q.dialog({
+          title: "Confirmar",
+          message: `¿Desea salir de la página de administración?`,
+          cancel: "Cancelar",
+          ok: "Aceptar",
+          persistent: true,
+        }).onOk(() => {
+          router.push({ name: `home` });
+        });
       },
     };
   },

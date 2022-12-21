@@ -1,81 +1,80 @@
 <template>
-  <div class="q-pa-md row items-start q-gutter-md">
-    <q-card
-      class="my-card"
-      :style="isSelected ? 'transform: scale(0.95);' : ''"
-    >
-      <q-img :src="productInfo.imgUrl">
-        <div v-if="isSelected" class="absolute-full text-h4 flex flex-center">
-          <q-btn
-            round
-            flat
-            size="20px"
-            class="absolute"
-            icon="chevron_right"
-            style="right: 2px; top: 35%"
-            @click="[changeAmount(true), number < 20 ? number++ : number]"
-          />
-          {{ number }}
-          <q-btn
-            round
-            flat
-            size="20px"
-            class="absolute"
-            icon="chevron_left"
-            style="left: 2px; top: 35%"
-            @click="[changeAmount(false), number > 1 ? number-- : number]"
-          />
-        </div>
-      </q-img>
-
-      <q-card-section>
+  <q-card class="my-card" :style="isSelected ? 'transform: scale(0.95);' : ''">
+    <q-img :src="productInfo.imgUrl">
+      <div v-if="isSelected" class="absolute-full text-h4 flex flex-center">
         <q-btn
-          fab
-          :disable="isEdit"
-          :color="isSelected ? `secondary` : `primary`"
-          :icon="isSelected ? `task_alt` : `shopping_basket`"
+          round
+          flat
+          size="20px"
           class="absolute"
-          style="top: 0; right: 12px; transform: translateY(-50%)"
-          @click="
-            [
-              (isSelected = !isSelected),
-              selectProduct(),
-              isSelected ? number++ : (number = 0),
-            ]
-          "
+          icon="chevron_right"
+          style="right: 2px; top: 35%"
+          @click="[changeAmount(true), number < 20 ? number++ : number]"
         />
-        <div class="row no-wrap items-center">
-          <div class="col text-h6 ellipsis">{{ productInfo.name }}</div>
-        </div>
-
-        <q-rating
-          :disable="isEdit"
-          v-model="stars"
-          :max="5"
-          size="32px"
-          no-reset
-          icon="star_border"
-          icon-selected="star"
-          icon-half="star_half"
-          no-dimming
-          @click="rating"
+        {{ number }}
+        <q-btn
+          round
+          flat
+          size="20px"
+          class="absolute"
+          icon="chevron_left"
+          style="left: 2px; top: 35%"
+          @click="[changeAmount(false), number > 1 ? number-- : number]"
         />
-      </q-card-section>
+      </div>
+      <slot name="uploader"></slot>
+    </q-img>
 
-      <q-card-section class="q-pt-none">
-        <div class="text-subtitle1">$・{{ productInfo.price }}</div>
-        <div class="text-caption text-grey">
-          {{ productInfo.description }}
-        </div>
-      </q-card-section>
-    </q-card>
-  </div>
+    <q-card-section>
+      <q-btn
+        fab
+        :disable="isEdit"
+        :color="isSelected ? `secondary` : `primary`"
+        :icon="isSelected ? `task_alt` : `shopping_basket`"
+        class="absolute"
+        style="top: 0; right: 12px; transform: translateY(-50%)"
+        @click="
+          [
+            (isSelected = !isSelected),
+            selectProduct(),
+            isSelected ? number++ : (number = 0),
+          ]
+        "
+      />
+      <div class="row no-wrap items-center">
+        <div class="col text-h6 ellipsis">{{ productInfo.name }}</div>
+      </div>
+
+      <q-rating
+        :disable="isEdit"
+        v-model="stars"
+        :max="5"
+        size="32px"
+        no-reset
+        icon="star_border"
+        icon-selected="star"
+        icon-half="star_half"
+        no-dimming
+        @click="rating"
+      />
+    </q-card-section>
+
+    <q-card-section class="q-pt-none">
+      <div class="text-subtitle1">$・{{ productInfo.price }}</div>
+      <div class="text-caption text-grey">
+        {{ productInfo.description }}
+      </div>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script>
 import { defineComponent, ref, toRef } from "vue";
 
 export default defineComponent({
+  components: {
+    // ProductMenuVue,
+  },
   props: {
     product: {
       type: Object,
@@ -93,6 +92,7 @@ export default defineComponent({
     },
     selected: { type: Boolean, required: false, default: false },
     amount: { type: Number, required: false, default: 0 },
+    //esta prop es para cuando se vaya a crear o editar un producto no permitir que se escoja o se le haga rating
     isEditing: { type: Boolean, required: false, default: false },
   },
   setup(props, ctx) {

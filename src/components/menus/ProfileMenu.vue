@@ -19,7 +19,11 @@
         </div>
         <div class="text-subtitle2 text-weight-thin">
           {{
-            user.email.length > 30 ? user.email.substring(0, 30) : user.email
+            user.email != undefined
+              ? user.email.length > 30
+                ? user.email.substring(0, 30)
+                : user.email
+              : ""
           }}
         </div>
         <div class="q-gutter-sm q-mt-sm">

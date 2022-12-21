@@ -45,7 +45,7 @@ export default route(function (/* { store, ssrContext } */) {
       return { name: "notFound" };
     }
     if (auth.isAutenticatedNow && to.path.includes("auth")) {
-      return false;
+      return { name: "notFound" };
     }
   });
 

@@ -13,7 +13,7 @@
           <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md">
             <q-input
               v-model="nameuserOrEmail"
-              label="Nombre de usuario o contraseña *"
+              label="Nombre de usuario o correo *"
               :rules="[
                 (val) => (val && val.length > 0) || `Por favor escriba algo`,
               ]"

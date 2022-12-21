@@ -1,19 +1,21 @@
 <template>
   <div class="q-pa-md">
     <q-table
+      ref="tableRef"
       :grid="false"
       flat
       bordered
       class="q-px-sm"
       style="height: 450px"
-      :title="props.ptitle"
+      :title="ptitle"
       :rows="rows"
       :columns="columns"
-      row-key="index"
-      virtual-scroll
+      row-key="name"
+      :virtual-scroll="scroll"
       :pagination="pagination"
-      :rows-per-page-options="[0]"
       :filter="filter"
+      :loading="loading"
+      @request="onRequest"
     >
       <template v-slot:top-right>
         <div class="row q-gutter-md">
@@ -66,7 +68,7 @@
 
 <script>
 import { useQuasar } from "quasar";
-import { ref, toRef, toRefs, nextTick } from "vue";
+import { ref, toRef, toRefs, onMounted } from "vue";
 
 export default {
   props: {
@@ -74,9 +76,15 @@ export default {
     prows: { type: Array, required: false },
     ptitle: { type: String, required: false },
     ptype: { type: Object, required: true },
+    onRequest: { type: Function, required: false },
+    loading: { type: Boolean, required: false, default: false },
+    pagination: { type: Object, required: false },
+    scroll: { type: Boolean, required: false, default: false },
   },
 
   setup(props, ctx) {
+    const tableRef = ref(null);
+
     const filter = ref("");
     const rows = toRef(props, "prows");
     const { pcolumns } = toRefs(props);
@@ -93,12 +101,16 @@ export default {
         ctx.emit("click", id, true);
       });
     }
+    onMounted(() => {
+      // get initial data from server (1st page)
+      tableRef.value.requestServerInteraction();
+    });
     return {
+      tableRef,
       props,
       columns,
       rows,
       filter,
-      pagination: { rowsPerPage: 0 },
 
       confirm,
 

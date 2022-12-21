@@ -1,5 +1,6 @@
 <template>
   <q-uploader
+    class=""
     :factory="uploadImage"
     auto-upload
     @added="setURL"

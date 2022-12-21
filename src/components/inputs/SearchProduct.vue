@@ -35,7 +35,6 @@ export default defineComponent({
   methods: {
     searchProducts() {
       if (this.search > "") {
-        console.log("Aquiiiiiiiiii", this.search);
         this.searchDishes(this.search);
       }
     },

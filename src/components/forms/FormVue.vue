@@ -1,7 +1,9 @@
 <template>
-  <div class="q-pa-md fit row wrap justify-start items-start content-start">
+  <div
+    class="q-pa-md fit row wrap justify-start items-start content-start q-pb-xl"
+  >
     <slot class="col-grow" name="left"></slot>
-    <q-form @submit="onSubmit" class="q-gutter-md col-grow">
+    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md col-grow">
       <q-input
         v-for="input in inputs"
         v-bind:key="input"
@@ -18,8 +20,15 @@
         autogrow
       ></q-input>
       <slot name="select"></slot>
-      <div>
-        <q-btn label="Enviar" type="submit" color="primary" />
+      <div class="q-gutter-xs">
+        <q-btn
+          v-for="button in buttons"
+          :key="button"
+          :label="button.label"
+          :type="button.type"
+          :color="button.color"
+          :flat="button.flat"
+        />
       </div>
     </q-form>
   </div>
@@ -36,6 +45,15 @@ export default {
       default() {
         return {
           inputs: [{ index: 0, label: "", name: "", value: null, rules: [] }],
+          buttons: [
+            {
+              index: 0,
+              label: "Enviar",
+              type: "submit",
+              color: "primary",
+              flat: false,
+            },
+          ],
         };
       },
     },
@@ -53,11 +71,13 @@ export default {
     const submitEmpty = ref(false);
     const submitResult = ref([]);
     const inputs = data.value.inputs;
+    const buttons = data.value.buttons;
     const models = Object.assign([], data.value.inputs);
     const values = ref([]);
     return {
       preferred: ref("rock"),
       inputs,
+      buttons,
       models,
       values,
       submitEmpty,
@@ -73,10 +93,14 @@ export default {
           });
         }
 
-        ctx.emit("select", data);
+        ctx.emit("submit", data);
 
         submitResult.value = data;
         submitEmpty.value = data.length === 0;
+      },
+      onReset() {
+        values.value.forEach((input) => (input.value = null));
+        ctx.emit("reset");
       },
     };
   },
